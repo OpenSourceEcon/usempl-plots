@@ -47,7 +47,6 @@ setup(
         "matplotlib",
         "pytest>=7.1.2",
         "pytest-cov",
-        "pytest-pycodestyle",
         "coverage>=6.3.2",
         "codecov>=2.1.11",
         "black>=24.1.1",
