@@ -33,9 +33,7 @@ setup(
         "Issue Tracker": "https://github.com/OpenSourceEcon/usempl-plots/issues",
     },
     packages=find_packages(),
-    package_data={
-        "usempl_plots": ["data/*"]
-    },
+    package_data={"usempl_plots": ["data/*"]},
     include_packages=True,
     python_requires=">=3.11",
     install_requires=[

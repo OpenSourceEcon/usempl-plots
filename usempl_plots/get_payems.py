@@ -20,9 +20,7 @@ Define functions
 
 
 def get_payems_data(
-    beg_date_str="1919-01-01",
-    end_date_str="today",
-    file_path=None
+    beg_date_str="1919-01-01", end_date_str="today", file_path=None
 ):
     """
     This function either downloads or reads in the U.S. total nonfarm payrolls
@@ -73,32 +71,34 @@ def get_payems_data(
             beg_date = dt.datetime.strptime(beg_date_str, "%Y-%m-%d")
         except:
             err_msg = (
-                "Error get_payems.py: beg_date_str input must be either a " +
-                "date string in 'YYYY-mm-dd' format or None."
+                "Error get_payems.py: beg_date_str input must be either a "
+                + "date string in 'YYYY-mm-dd' format or None."
             )
             raise ValueError(err_msg)
     if beg_date_str != None and beg_date < dt.datetime(1919, 1, 1):
         err_msg = (
-            "Error get_payems.py module: beg_date_str input must be a date " +
-            "string in 'YYYY-mm-dd' format that is on or later than " +
-            "1919-01-01.")
+            "Error get_payems.py module: beg_date_str input must be a date "
+            + "string in 'YYYY-mm-dd' format that is on or later than "
+            + "1919-01-01."
+        )
         raise ValueError(err_msg)
     if end_date_str != "today" and end_date_str != None:
         try:
             end_date = dt.datetime.strptime(end_date_str, "%Y-%m-%d")
         except:
             err_msg = (
-                "Error get_payems.py: end_date_str input must be either a " +
-                "date string in 'YYYY-mm-dd' format or 'Today' or None."
+                "Error get_payems.py: end_date_str input must be either a "
+                + "date string in 'YYYY-mm-dd' format or 'Today' or None."
             )
             raise ValueError(err_msg)
     elif end_date_str == "today":
         end_date = dt.datetime.today()
     if beg_date_str != None and end_date_str != None and beg_date > end_date:
         err_msg = (
-            "Error get_payems.py module: beg_date_str input must be a date " +
-            "string in 'YYYY-mm-dd' format that is on or earlier than " +
-            "end_date_str input.")
+            "Error get_payems.py module: beg_date_str input must be a date "
+            + "string in 'YYYY-mm-dd' format that is on or earlier than "
+            + "end_date_str input."
+        )
         raise ValueError(err_msg)
 
     # Name the current directory and make sure it has a data folder
@@ -153,28 +153,35 @@ def get_payems_data(
                 columns=["Date"],
             )
             usempl_ann_df = pd.merge(
-                usempl_ann_df, months_df, left_on="Date", right_on="Date",
-                how="right"
+                usempl_ann_df,
+                months_df,
+                left_on="Date",
+                right_on="Date",
+                how="right",
             )
-            usempl_df = pd.concat([usempl_ann_df, usempl_df],
-                                  ignore_index=True)
+            usempl_df = pd.concat(
+                [usempl_ann_df, usempl_df], ignore_index=True
+            )
             usempl_df = usempl_df.sort_values(by="Date")
             usempl_df = usempl_df.reset_index(drop=True)
             usempl_df = usempl_df.sort_values(by="Date")
             usempl_df = usempl_df.reset_index(drop=True)
             obs_interp = int(
-                (start_date_mthly.year - beg_date.year) * 12 +
-                start_date_mthly.month - beg_date.month + 2
+                (start_date_mthly.year - beg_date.year) * 12
+                + start_date_mthly.month
+                - beg_date.month
+                + 2
             )
             usempl_df_interp = usempl_df.iloc[:obs_interp, :]
             usempl_df_interp.loc[:, "PAYEMS"] = (
-                usempl_df["PAYEMS"].iloc[:obs_interp].interpolate(
-                    method="cubic"
-                )
+                usempl_df["PAYEMS"]
+                .iloc[:obs_interp]
+                .interpolate(method="cubic")
             )
-            usempl_df.loc[:obs_interp - 3, "PAYEMS"] = \
-                usempl_df_interp.loc[:obs_interp - 3, "PAYEMS"]
-            usempl_df.loc[:obs_interp - 3, "Source"] = (
+            usempl_df.loc[: obs_interp - 3, "PAYEMS"] = usempl_df_interp.loc[
+                : obs_interp - 3, "PAYEMS"
+            ]
+            usempl_df.loc[: obs_interp - 3, "Source"] = (
                 "Cubic spline interp. of BLS annual data"
             )
 
@@ -187,28 +194,30 @@ def get_payems_data(
         # Create "BLS_annual" column that only takes the July values between 1919 and 1938
         usempl_df["BLS_annual"] = np.nan
         usempl_df.loc[
-            (usempl_df["Date"].dt.month == 7) &
-            (usempl_df["Date"].dt.year >= 1919) &
-            (usempl_df["Date"].dt.year <= 1938),
-            "BLS_annual"
+            (usempl_df["Date"].dt.month == 7)
+            & (usempl_df["Date"].dt.year >= 1919)
+            & (usempl_df["Date"].dt.year <= 1938),
+            "BLS_annual",
         ] = usempl_df.loc[
-            (usempl_df["Date"].dt.month == 7) &
-            (usempl_df["Date"].dt.year >= 1919) &
-            (usempl_df["Date"].dt.year <= 1938),
-            "PAYEMS"
+            (usempl_df["Date"].dt.month == 7)
+            & (usempl_df["Date"].dt.year >= 1919)
+            & (usempl_df["Date"].dt.year <= 1938),
+            "PAYEMS",
         ]
 
         usempl_df["diff_monthly"] = usempl_df["PAYEMS"].diff()
         usempl_df["diff_yoy"] = usempl_df["PAYEMS"].diff(12)
         # reorder the columns
-        usempl_df = usempl_df[[
-            "Date",
-            "PAYEMS",
-            "BLS_annual",
-            "diff_monthly",
-            "diff_yoy",
-            "Source"
-        ]]
+        usempl_df = usempl_df[
+            [
+                "Date",
+                "PAYEMS",
+                "BLS_annual",
+                "diff_monthly",
+                "diff_yoy",
+                "Source",
+            ]
+        ]
 
         filename = "usempl_" + end_date_str2 + ".csv"
         usempl_df.to_csv(os.path.join(data_dir, filename), index=False)
@@ -231,7 +240,7 @@ def get_payems_data(
     beg_date2 = dt.datetime.strptime(beg_date_str2, "%Y-%m-%d")
     print(
         "Beginning date of U.S. employment series is",
-        beg_date2.strftime("%Y-%m-%d")
+        beg_date2.strftime("%Y-%m-%d"),
     )
     print(
         "End date of U.S. employment series is", end_date2.strftime("%Y-%m-%d")

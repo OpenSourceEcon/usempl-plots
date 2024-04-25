@@ -11,26 +11,31 @@ from bokeh.models.glyphs import VArea
 from bokeh.models.tickers import SingleIntervalTicker
 from bokeh.io import output_file
 from bokeh.plotting import figure, show
-from bokeh.models import (ColumnDataSource, Title, Legend, HoverTool,
-                          NumeralTickFormatter)
+from bokeh.models import (
+    ColumnDataSource,
+    Title,
+    Legend,
+    HoverTool,
+    NumeralTickFormatter,
+)
 from bokeh.models.widgets import Tabs, Panel
 
-'''
+"""
 -------------------------------------------------------------------------------
 Create pandas DataFrames and Column Data Source data objects
 -------------------------------------------------------------------------------
-'''
+"""
 
 
 def gen_payems_tseries(
-    start_date='min',
-    end_date='max',
+    start_date="min",
+    end_date="max",
     recession_bars=True,
     download=True,
     fig_title_str=(
         "Time Series of US Monthly Nonfarm Payroll Employment (PAYEMS)"
     ),
-    html_show=True
+    html_show=True,
 ):
     """
     This function creates a simple time series plot of US nonfarm payroll
@@ -46,31 +51,31 @@ def gen_payems_tseries(
     if not os.access(image_dir, os.F_OK):
         os.makedirs(image_dir)
     data_dir = os.path.join(cur_path, "data")
-    recession_data_path = os.path.join(data_dir, 'recession_data.csv')
+    recession_data_path = os.path.join(data_dir, "recession_data.csv")
 
     # Get the employment data
-    if start_date == 'min':
+    if start_date == "min":
         beg_date_str = "1919-01-01"
     else:
         try:
             beg_date_test = dt.datetime.strptime(start_date, "%Y-%m-%d")
         except:
             err_msg = (
-                "Error get_payems.py: start_date input must be either a " +
-                "date string in 'YYYY-mm-dd' format or 'min'."
+                "Error get_payems.py: start_date input must be either a "
+                + "date string in 'YYYY-mm-dd' format or 'min'."
             )
             raise ValueError(err_msg)
         beg_date_str = start_date
 
-    if end_date == 'max':
+    if end_date == "max":
         end_date_str = "today"
     else:
         try:
             end_date_test = dt.datetime.strptime(end_date, "%Y-%m-%d")
         except:
             err_msg = (
-                "Error get_payems.py: end_date input must be either a " +
-                "date string in 'YYYY-mm-dd' format or 'max'."
+                "Error get_payems.py: end_date input must be either a "
+                + "date string in 'YYYY-mm-dd' format or 'max'."
             )
             raise ValueError(err_msg)
         end_date_str = end_date
@@ -84,30 +89,38 @@ def gen_payems_tseries(
         usempl_df, beg_date_str2, end_date_str2 = get_payems_data(
             beg_date_str=beg_date_str,
             end_date_str=end_date_str,
-            file_path=None
+            file_path=None,
         )
         print(
-            "PAYEMS data downloaded on " +  download_date_str +
-            " and has most recent PAYEMS data month of " + end_date_str2 + "."
+            "PAYEMS data downloaded on "
+            + download_date_str
+            + " and has most recent PAYEMS data month of "
+            + end_date_str2
+            + "."
         )
     else:
         usempl_df, beg_date_str2, end_date_str2 = get_payems_data(
             beg_date_str=beg_date_str,
             end_date_str=end_date_str,
-            file_path=os.path.join(data_dir, "usempl_" + end_date_str + ".csv")
+            file_path=os.path.join(
+                data_dir, "usempl_" + end_date_str + ".csv"
+            ),
         )
         print(
-            "PAYEMS data loaded from memory on " +  download_date_str +
-            " and has most recent PAYEMS data month of " + end_date_str2 + "."
+            "PAYEMS data loaded from memory on "
+            + download_date_str
+            + " and has most recent PAYEMS data month of "
+            + end_date_str2
+            + "."
         )
 
     # Create a dataframe that only contains dates less than 1939-01-01
-    usempl_imputed_df = usempl_df[usempl_df['Date'] < '1939-01-01']
-    usempl_monthly_df = usempl_df[usempl_df['Date'] >= '1939-01-01']
+    usempl_imputed_df = usempl_df[usempl_df["Date"] < "1939-01-01"]
+    usempl_monthly_df = usempl_df[usempl_df["Date"] >= "1939-01-01"]
     # Create a dataframe usempl_annual_df that only contains data from before
     # 1939 and only for month 7
     usempl_annual_df = usempl_imputed_df[
-        usempl_imputed_df['Date'].dt.month == 7
+        usempl_imputed_df["Date"].dt.month == 7
     ]
     usempl_imputed_cds = ColumnDataSource(usempl_imputed_df)
     usempl_annual_cds = ColumnDataSource(usempl_annual_df)
@@ -115,9 +128,9 @@ def gen_payems_tseries(
 
     # Create recession data column data source object
     recession_df = pd.read_csv(
-        recession_data_path, parse_dates=['Peak','Trough']
+        recession_data_path, parse_dates=["Peak", "Trough"]
     )
-    recession_data_length = len(recession_df['Peak'])
+    recession_data_length = len(recession_df["Peak"])
 
     # Create Bokeh plot of PAYEMS time series
     fig_title = fig_title_str
@@ -129,13 +142,13 @@ def gen_payems_tseries(
         ("Date", "@Date{%F}"),
         ("Employment", "@PAYEMS{0,0.}"),
         ("Monthly change", "@diff_monthly{0,0.}"),
-        ("Year-over-year change", "@diff_yoy{0,0.}")
+        ("Year-over-year change", "@diff_yoy{0,0.}"),
     ]
 
-    min_date = usempl_df['Date'].min()
-    max_date = usempl_df['Date'].max()
-    min_y_val = usempl_df['PAYEMS'].min()
-    max_y_val = usempl_df['PAYEMS'].max()
+    min_date = usempl_df["Date"].min()
+    max_date = usempl_df["Date"].max()
+    min_y_val = usempl_df["PAYEMS"].min()
+    max_y_val = usempl_df["PAYEMS"].max()
     range_y_vals = max_y_val - min_y_val
     fig_buffer_pct = 0.10
     fig = figure(
@@ -168,11 +181,11 @@ def gen_payems_tseries(
     fig.toolbar.logo = None
 
     # Set title font size and axes font sizes
-    fig.title.text_font_size = '18pt'
-    fig.xaxis.axis_label_text_font_size = '12pt'
-    fig.xaxis.major_label_text_font_size = '12pt'
-    fig.yaxis.axis_label_text_font_size = '12pt'
-    fig.yaxis.major_label_text_font_size = '12pt'
+    fig.title.text_font_size = "18pt"
+    fig.xaxis.axis_label_text_font_size = "12pt"
+    fig.xaxis.major_label_text_font_size = "12pt"
+    fig.yaxis.axis_label_text_font_size = "12pt"
+    fig.yaxis.major_label_text_font_size = "12pt"
 
     # # Modify tick intervals for X-axis and Y-axis
     # fig.xaxis.ticker = SingleIntervalTicker(interval=10, num_minor_ticks=2)
@@ -183,29 +196,29 @@ def gen_payems_tseries(
     if recession_bars:
         # Create recession bars
         for x in range(0, recession_data_length):
-            peak_date = recession_df['Peak'][x]
-            trough_date = recession_df['Trough'][x]
-            if(peak_date >= min_date and trough_date >= min_date):
+            peak_date = recession_df["Peak"][x]
+            trough_date = recession_df["Trough"][x]
+            if peak_date >= min_date and trough_date >= min_date:
                 fig.patch(
                     x=[peak_date, trough_date, trough_date, peak_date],
-                    y=[-100, -100, max_y_val+ 10, max_y_val + 10],
-                    fill_color='gray',
+                    y=[-100, -100, max_y_val + 10, max_y_val + 10],
+                    fill_color="gray",
                     fill_alpha=0.4,
                     line_width=0,
-                    legend_label='Recession'
+                    legend_label="Recession",
                 )
             if (
-                peak_date == trough_date and
-                peak_date >= min_date and
-                trough_date >= min_date
+                peak_date == trough_date
+                and peak_date >= min_date
+                and trough_date >= min_date
             ):
                 fig.patch(
                     x=[peak_date, trough_date + 1, trough_date + 1, peak_date],
                     y=[-100, -100, max_y_val + 10, max_y_val + 10],
-                    fill_color='gray',
+                    fill_color="gray",
                     fill_alpha=0.4,
                     line_width=0,
-                    legend_label='Recession'
+                    legend_label="Recession",
                 )
 
     # fig.line(
