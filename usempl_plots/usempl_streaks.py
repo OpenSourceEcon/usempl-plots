@@ -634,6 +634,11 @@ def usempl_streaks(
     return fig_lst, beg_date_str2, end_date_str2
 
 
+# def usempl_streaks_hist():
+
+#     return fig, beg_date_str2, end_date_str2
+
+
 if __name__ == "__main__":
     # execute only if run as a script
     fig_lst, beg_date_str, end_date_str = usempl_streaks()
