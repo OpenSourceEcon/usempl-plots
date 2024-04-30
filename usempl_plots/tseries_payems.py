@@ -152,9 +152,7 @@ def gen_payems_tseries(
             max_y_val + fig_buffer_pct * range_y_vals,
         ),
         y_minor_ticks=2,
-        x_range=(
-            min_date, max_date
-        ),
+        x_range=(min_date, max_date),
         x_minor_ticks=2,
         tools=[
             "save",
@@ -181,9 +179,15 @@ def gen_payems_tseries(
 
     # Reformat the labels for the ticks on the x and y axes
     y_tick_label_dict = {
-        20_000_000: "20m", 40_000_000: "40m", 60_000_000: "60m",
-        80_000_000: "80m", 100_000_000: "100m", 120_000_000: "120m",
-        140_000_000: "140m", 160_000_000: "160m"}
+        20_000_000: "20m",
+        40_000_000: "40m",
+        60_000_000: "60m",
+        80_000_000: "80m",
+        100_000_000: "100m",
+        120_000_000: "120m",
+        140_000_000: "140m",
+        160_000_000: "160m",
+    }
 
     fig.yaxis.major_label_overrides = y_tick_label_dict
 
@@ -194,40 +198,40 @@ def gen_payems_tseries(
     # fig.ygrid.ticker = SingleIntervalTicker(interval=5)
 
     fig.line(
-        x='Date',
+        x="Date",
         y="PAYEMS",
         source=usempl_monthly_cds,
-        color='blue',
-        line_dash='solid',
+        color="blue",
+        line_dash="solid",
         line_width=3,
         alpha=0.7,
         muted_alpha=0.1,
-        legend_label='Monthly data'
+        legend_label="Monthly data",
     )
 
     fig.line(
-        x='Date',
+        x="Date",
         y="PAYEMS",
         source=usempl_imputed_cds,
-        color='red',
-        line_dash='solid',
+        color="red",
+        line_dash="solid",
         line_width=3,
         alpha=0.7,
         muted_alpha=0.1,
-        legend_label='Interpolated from annual data'
+        legend_label="Interpolated from annual data",
     )
 
     fig.scatter(
-        x='Date',
+        x="Date",
         y="PAYEMS",
         source=usempl_annual_cds,
         size=2,
         line_width=1,
-        line_color='black',
-        fill_color='purple',
+        line_color="black",
+        fill_color="purple",
         alpha=0.7,
         muted_alpha=0.1,
-        legend_label='Annual data points'
+        legend_label="Annual data points",
     )
 
     if recession_bars:
@@ -242,7 +246,7 @@ def gen_payems_tseries(
                         -10_000_000,
                         -10_000_000,
                         max_y_val + 100_000_000,
-                        max_y_val + 100_000_000
+                        max_y_val + 100_000_000,
                     ],
                     fill_color="gray",
                     fill_alpha=0.4,
@@ -260,7 +264,7 @@ def gen_payems_tseries(
                         -10_000_000,
                         -10_000_000,
                         max_y_val + 100_000_000,
-                        max_y_val + 100_000_000
+                        max_y_val + 100_000_000,
                     ],
                     fill_color="gray",
                     fill_alpha=0.4,
@@ -279,35 +283,39 @@ def gen_payems_tseries(
     # fig.add_tools(HoverTool(tooltips=tooltips, formatters={'@Date': 'datetime'}))
 
     # Add legend
-    fig.legend.location = 'top_left'
+    fig.legend.location = "top_left"
     fig.legend.border_line_width = 2
-    fig.legend.border_line_color = 'black'
+    fig.legend.border_line_color = "black"
     fig.legend.border_line_alpha = 1
-    fig.legend.label_text_font_size = '4mm'
+    fig.legend.label_text_font_size = "4mm"
 
     # Set legend muting click policy
-    fig.legend.click_policy = 'mute'
+    fig.legend.click_policy = "mute"
 
     # Add notes below image. The list note_text_list contains a tuple with a
     # string for every line of the notes
     updated_date_str = (
-        download_date.strftime("%B") +
-        " " +
-        download_date.strftime("%d").lstrip("0") +
-        ", " +
-        download_date.strftime("%Y")
+        download_date.strftime("%B")
+        + " "
+        + download_date.strftime("%d").lstrip("0")
+        + ", "
+        + download_date.strftime("%Y")
     )
     note_text_list = [
         (
-            "Source: Richard W. Evans (@RickEcon), historical PAYEMS data " +
-            "from FRED and BLS, updated "
+            "Source: Richard W. Evans (@RickEcon), historical PAYEMS data "
+            + "from FRED and BLS, updated "
         ),
-        ("   " + updated_date_str + ".")
+        ("   " + updated_date_str + "."),
     ]
     for note_text in note_text_list:
-        caption = Title(text=note_text, align='left', text_font_size='4mm',
-                        text_font_style='italic')
-        fig.add_layout(caption, 'below')
+        caption = Title(
+            text=note_text,
+            align="left",
+            text_font_size="4mm",
+            text_font_style="italic",
+        )
+        fig.add_layout(caption, "below")
 
     if html_show:
         show(fig)

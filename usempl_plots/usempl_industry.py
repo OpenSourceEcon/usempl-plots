@@ -202,8 +202,12 @@ def usempl_ind_chg(
                 min_mth_val_lst.append(strk_df["strk_mths"].min())
                 max_mth_val_lst.append(strk_df["strk_mths"].max())
                 strk_table_df.loc[strk_num - 1] = [
-                    strk_num, strk_start_mth_str, strk_end_mth_str, strk_mths,
-                    strk_cum, strk_cum / strk_mths
+                    strk_num,
+                    strk_start_mth_str,
+                    strk_end_mth_str,
+                    strk_mths,
+                    strk_cum,
+                    strk_cum / strk_mths,
                 ]
         elif (
             usempl_df.loc[i, "diff_monthly"] <= 0
@@ -225,8 +229,12 @@ def usempl_ind_chg(
             min_mth_val_lst.append(strk_df["strk_mths"].min())
             max_mth_val_lst.append(strk_df["strk_mths"].max())
             strk_table_df.loc[strk_num - 1] = [
-                strk_num, strk_start_mth_str, strk_end_mth_str, strk_mths,
-                strk_cum, strk_cum / strk_mths
+                strk_num,
+                strk_start_mth_str,
+                strk_end_mth_str,
+                strk_mths,
+                strk_cum,
+                strk_cum / strk_mths,
             ]
             strk_mths = 0
             strk_cum = 0
@@ -238,7 +246,7 @@ def usempl_ind_chg(
     output_file(
         os.path.join(image_dir, filename_strk),
         title=fig_title_strk,
-        mode='inline'
+        mode="inline",
     )
 
     # Format the tooltip
@@ -300,8 +308,11 @@ def usempl_ind_chg(
 
     # Reformat the labels for the ticks on the x and y axes
     y_tick_label_dict_strk = {
-        0: "0", 5_000_000: "5m", 10_000_000: "10m", 15_000_000: "15m",
-        20_000_000: "20m"
+        0: "0",
+        5_000_000: "5m",
+        10_000_000: "10m",
+        15_000_000: "15m",
+        20_000_000: "20m",
     }
 
     fig_strk.yaxis.major_label_overrides = y_tick_label_dict_strk
@@ -353,23 +364,27 @@ def usempl_ind_chg(
 
     # Add source text below figure
     updated_date_str = (
-        download_date.strftime("%B") +
-        " " +
-        download_date.strftime("%d").lstrip("0") +
-        ", " +
-        download_date.strftime("%Y")
+        download_date.strftime("%B")
+        + " "
+        + download_date.strftime("%d").lstrip("0")
+        + ", "
+        + download_date.strftime("%Y")
     )
     note_text_list = [
         (
-            "Source: Richard W. Evans (@RickEcon), historical PAYEMS data " +
-            "from FRED and BLS, updated "
+            "Source: Richard W. Evans (@RickEcon), historical PAYEMS data "
+            + "from FRED and BLS, updated "
         ),
-        ("    " + updated_date_str + ".")
+        ("    " + updated_date_str + "."),
     ]
     for note_text in note_text_list:
-        caption = Title(text=note_text, align='left', text_font_size='4mm',
-                        text_font_style='italic')
-        fig_strk.add_layout(caption, 'below')
+        caption = Title(
+            text=note_text,
+            align="left",
+            text_font_size="4mm",
+            text_font_style="italic",
+        )
+        fig_strk.add_layout(caption, "below")
 
     # Add the HoverTool to the figure
     fig_strk.add_tools(
@@ -387,8 +402,8 @@ def usempl_ind_chg(
         print(
             strk_table_df[
                 (
-                    (strk_table_df["months_in_streak"] >= 40) |
-                    (strk_table_df["total_emp_gain"] >= 10_000_000)
+                    (strk_table_df["months_in_streak"] >= 40)
+                    | (strk_table_df["total_emp_gain"] >= 10_000_000)
                 )
             ].sort_values(by="months_in_streak", ascending=False)
         )
@@ -399,15 +414,15 @@ def usempl_ind_chg(
     fig_lst = [fig_strk]
 
     if scatter_histogram:
-        fig_title_scat=(
-            "US employment streaks: consecutive positive monthly gains and " +
-            "average monthly employment gains, 1939 to 2024"
+        fig_title_scat = (
+            "US employment streaks: consecutive positive monthly gains and "
+            + "average monthly employment gains, 1939 to 2024"
         )
         filename_scat = "usempl_streaks_scatter" + end_date_str2 + ".html"
         output_file(
             os.path.join(image_dir, filename_scat),
             title=fig_title_scat,
-            mode='inline'
+            mode="inline",
         )
 
         # Format the tooltip
@@ -464,8 +479,11 @@ def usempl_ind_chg(
 
         # Reformat the labels for the ticks on the x and y axes
         y_tick_label_dict_scat = {
-            0: "0", 500_000: "500k", 1_000_000: "1.0m", 1_500_000: "1.5m",
-            2_000_000: "2.0m"
+            0: "0",
+            500_000: "500k",
+            1_000_000: "1.0m",
+            1_500_000: "1.5m",
+            2_000_000: "2.0m",
         }
 
         fig_scat.yaxis.major_label_overrides = y_tick_label_dict_scat
@@ -476,7 +494,7 @@ def usempl_ind_chg(
             source=strk_table_cds,
             size=8,
             line_width=1,
-            line_color='black',
+            line_color="black",
             fill_color="blue",
             alpha=0.6,
         )
@@ -497,7 +515,10 @@ def usempl_ind_chg(
             HoverTool(
                 tooltips=tooltips_scat,
                 visible=False,
-                formatters={"@Start date": "datetime", "@End date": "datetime"},
+                formatters={
+                    "@Start date": "datetime",
+                    "@End date": "datetime",
+                },
             )
         )
 
@@ -505,8 +526,8 @@ def usempl_ind_chg(
         hhist, hedges = np.histogram(
             strk_table_df["months_in_streak"], bins=24, range=(0, 120)
         )
-        hzeros = np.zeros(len(hedges)-1)
-        hmax = max(hhist)*1.15
+        hzeros = np.zeros(len(hedges) - 1)
+        hmax = max(hhist) * 1.15
 
         LINE_ARGS = dict(color="#3A5785", line_color=None)
 
@@ -520,7 +541,7 @@ def usempl_ind_chg(
             y_minor_ticks=2,
             min_border=10,
             min_border_left=50,
-            y_axis_location="right"
+            y_axis_location="right",
         )
         xhist.toolbar.logo = None
         xhist.xgrid.grid_line_color = None
@@ -534,40 +555,58 @@ def usempl_ind_chg(
         xhist.yaxis.major_label_text_font_size = "10pt"
 
         xhist.quad(
-            bottom=0, left=hedges[:-1], right=hedges[1:], top=hhist,
-            color="blue", line_color="black"
+            bottom=0,
+            left=hedges[:-1],
+            right=hedges[1:],
+            top=hhist,
+            color="blue",
+            line_color="black",
         )
         hh1 = xhist.quad(
-            bottom=0, left=hedges[:-1], right=hedges[1:], top=hzeros,
-            alpha=0.5, **LINE_ARGS
+            bottom=0,
+            left=hedges[:-1],
+            right=hedges[1:],
+            top=hzeros,
+            alpha=0.5,
+            **LINE_ARGS,
         )
         hh2 = xhist.quad(
-            bottom=0, left=hedges[:-1], right=hedges[1:], top=hzeros,
-            alpha=0.1, **LINE_ARGS
+            bottom=0,
+            left=hedges[:-1],
+            right=hedges[1:],
+            top=hzeros,
+            alpha=0.1,
+            **LINE_ARGS,
         )
 
         # Create x-histogram labels
         xhist_label_source = ColumnDataSource(
             dict(
-                bin_midpoints=(hedges[1:]-2.5).tolist(),
-                bin_heights=hhist.tolist()
+                bin_midpoints=(hedges[1:] - 2.5).tolist(),
+                bin_heights=hhist.tolist(),
             )
         )
 
         xhist_labels = LabelSet(
-            x='bin_midpoints', y='bin_heights', text='bin_heights',
-            level='glyph', text_align='center', text_font_size="8pt",
-            y_offset=3, source=xhist_label_source
+            x="bin_midpoints",
+            y="bin_heights",
+            text="bin_heights",
+            level="glyph",
+            text_align="center",
+            text_font_size="8pt",
+            y_offset=3,
+            source=xhist_label_source,
         )
         xhist.add_layout(xhist_labels)
 
         # create the vertical histogram
         vhist, vedges = np.histogram(
-            strk_table_df["avg_monthly_emp_gain"], bins=18,
-            range=(0, 1_800_000)
+            strk_table_df["avg_monthly_emp_gain"],
+            bins=18,
+            range=(0, 1_800_000),
         )
-        vzeros = np.zeros(len(vedges)-1)
-        vmax = max(vhist)*1.2
+        vzeros = np.zeros(len(vedges) - 1)
+        vmax = max(vhist) * 1.2
 
         yhist = figure(
             toolbar_location=None,
@@ -578,7 +617,7 @@ def usempl_ind_chg(
             y_range=fig_scat.y_range,
             y_minor_ticks=5,
             min_border=10,
-            y_axis_location="right"
+            y_axis_location="right",
         )
         yhist.toolbar.logo = None
         yhist.ygrid.grid_line_color = None
@@ -595,30 +634,47 @@ def usempl_ind_chg(
         yhist.yaxis.major_label_overrides = y_tick_label_dict_scat
 
         yhist.quad(
-            left=0, bottom=vedges[:-1], top=vedges[1:], right=vhist,
-            color="blue", line_color="black"
+            left=0,
+            bottom=vedges[:-1],
+            top=vedges[1:],
+            right=vhist,
+            color="blue",
+            line_color="black",
         )
         vh1 = yhist.quad(
-            left=0, bottom=vedges[:-1], top=vedges[1:], right=vzeros,
-            alpha=0.5, **LINE_ARGS
+            left=0,
+            bottom=vedges[:-1],
+            top=vedges[1:],
+            right=vzeros,
+            alpha=0.5,
+            **LINE_ARGS,
         )
         vh2 = yhist.quad(
-            left=0, bottom=vedges[:-1], top=vedges[1:], right=vzeros,
-            alpha=0.1, **LINE_ARGS
+            left=0,
+            bottom=vedges[:-1],
+            top=vedges[1:],
+            right=vzeros,
+            alpha=0.1,
+            **LINE_ARGS,
         )
 
         # Create y-histogram labels
         yhist_label_source = ColumnDataSource(
             dict(
-                bin_midpoints=(vedges[1:]-60_000).tolist(),
-                bin_heights=vhist.tolist()
+                bin_midpoints=(vedges[1:] - 60_000).tolist(),
+                bin_heights=vhist.tolist(),
             )
         )
 
         yhist_labels = LabelSet(
-            x='bin_heights', y='bin_midpoints', text='bin_heights',
-            level='glyph', text_align='left', text_font_size="8pt",
-            x_offset=3, source=yhist_label_source
+            x="bin_heights",
+            y="bin_midpoints",
+            text="bin_heights",
+            level="glyph",
+            text_align="left",
+            text_font_size="8pt",
+            x_offset=3,
+            source=yhist_label_source,
         )
         yhist.add_layout(yhist_labels)
 
@@ -630,23 +686,27 @@ def usempl_ind_chg(
         # Add notes below image. The list note_text_list contains a tuple with
         # a string for every line of the notes
         updated_date_str = (
-            download_date.strftime("%B") +
-            " " +
-            download_date.strftime("%d").lstrip("0") +
-            ", " +
-            download_date.strftime("%Y")
+            download_date.strftime("%B")
+            + " "
+            + download_date.strftime("%d").lstrip("0")
+            + ", "
+            + download_date.strftime("%Y")
         )
         note_text_list = [
             (
-                "Source: Richard W. Evans (@RickEcon), historical PAYEMS " +
-                "data from FRED and BLS,"
+                "Source: Richard W. Evans (@RickEcon), historical PAYEMS "
+                + "data from FRED and BLS,"
             ),
-            ("    updated " + updated_date_str + ".")
+            ("    updated " + updated_date_str + "."),
         ]
         for note_text in note_text_list:
-            caption = Title(text=note_text, align='left', text_font_size='4mm',
-                            text_font_style='italic')
-            xhist.add_layout(caption, 'below')
+            caption = Title(
+                text=note_text,
+                align="left",
+                text_font_size="4mm",
+                text_font_style="italic",
+            )
+            xhist.add_layout(caption, "below")
 
         # show(fig_scat)
         show(layout)
