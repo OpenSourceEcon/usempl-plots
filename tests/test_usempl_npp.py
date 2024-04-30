@@ -12,7 +12,7 @@ Three main tests:
 import pytest
 import datetime as dt
 
-from usempl_plots.usempl_npp import usempl_npp
+from usempl_plots import usempl_npp
 
 
 # Create function to validate datetime text
@@ -76,7 +76,7 @@ def test_html_fig(
         print("Successful test, skipping invalid case")
         assert True
     else:
-        fig, end_date_str = usempl_npp(
+        fig, end_date_str = usempl_npp.usempl_npp(
             frwd_mths_main=frwd_mths_main,
             bkwd_mths_main=bkwd_mths_main,
             frwd_mths_max=frwd_mths_max,
