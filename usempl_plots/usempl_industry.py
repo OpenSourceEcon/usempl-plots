@@ -1,12 +1,38 @@
 """
-This module plots the streaks of consecutive positive employment gains from the
-US nonfarm employment (PAYEMS) seasonally adjusted monthly time series from the
-St. Louis Federal Reserve's FRED system
-(https://fred.stlouisfed.org/series/PAYEMS) or loads it from this directory and
-organizes it into series of consecutive positive monthly gain streaks.
+This module plots the change in monthly US seasonally adjusted US nonfarm
+employment (PAYEMS) by industry. The data is either taken from the St. Louis
+Federal Reserve's FRED system(https://fred.stlouisfed.org/) or loads it from
+this directory.
+
+https://www.bls.gov/webapps/legacy/cesbtab1.htm
 
 This module defines the following function(s):
-    usempl_streaks()
+    usempl_ind_chg()
+
+The industries are:
+- Goods Producing:
+  - Mining and Logging
+  - Construction
+  - Manufacturing
+- Private Service Providing:
+  - Wholesale Trade
+  - Retail Trade
+  - Transportation and Warehousing
+  - Utilities
+- Information
+- Financial Activities
+- Professional and Business Services
+- Private Education and Health Services
+  - Private Educational Services
+  - Health Care and Social Assistance
+- Leisure and Hospitality
+- Other Services
+- Government
+  - Federal Government
+  - State Government
+  - Local Government
+
+Use this URL for API access: https://data.bls.gov/cgi-bin/srgate
 """
 
 # Import packages
@@ -29,22 +55,19 @@ Define functions
 """
 
 
-def usempl_streaks(
-    start_date="min",
+def usempl_ind_chg(
+    start_date="2010-10-01",
     end_date="max",
     download_from_internet=True,
     fig_title_strk=(
-        "US employment streaks: consecutive positive monthly gains and "
-        + "cumulative employment gains, 1939 to 2024"
+        "Change in US employment my industry: October 2010 to March 2024"
     ),
-    scatter_histogram=True,
-    table_output=True,
     html_show=True,
 ):
     """
     This function creates the HTML and JavaScript code for the dynamic
-    visualization of the US positive employment streaks from 1939 (the
-    beginning of US monthly data) to the given end date.
+    visualization of the US change in monthly seasonally adjusted nonfarm
+    employment (PAYEMS) by industry.
 
     Args:
         start_date (str): start date of PAYEMS time series in 'YYYY-mm-dd'
@@ -692,11 +715,6 @@ def usempl_streaks(
         fig_lst.append(layout)
 
     return fig_lst, beg_date_str2, end_date_str2
-
-
-# def usempl_streaks_hist():
-
-#     return fig, beg_date_str2, end_date_str2
 
 
 if __name__ == "__main__":

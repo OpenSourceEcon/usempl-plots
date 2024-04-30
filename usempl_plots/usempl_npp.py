@@ -445,8 +445,8 @@ def usempl_npp(
     datarange_main_mths = int(frwd_mths_main + bkwd_mths_main)
     fig_buffer_pct = 0.10
     fig = figure(
-        plot_height=500,
-        plot_width=800,
+        height=450,
+        width=800,
         x_axis_label="Months from Peak",
         y_axis_label="PAYEMS as fraction of Peak",
         y_range=(
@@ -685,27 +685,27 @@ def usempl_npp(
     #                      background_fill_color='white',
     #                      background_fill_alpha=1.0))
 
-    # Add title and subtitle to the plot
-    fig_title2 = "Progression of U.S. total nonfarm employment"
-    fig_title3 = "(PAYEMS, seasonally adjusted) in last 15 recessions"
-    fig.add_layout(
-        Title(
-            text=fig_title3,
-            text_font_style="bold",
-            text_font_size="16pt",
-            align="center",
-        ),
-        "above",
-    )
-    fig.add_layout(
-        Title(
-            text=fig_title2,
-            text_font_style="bold",
-            text_font_size="16pt",
-            align="center",
-        ),
-        "above",
-    )
+    # # Add title and subtitle to the plot
+    # fig_title2 = "Progression of U.S. total nonfarm employment"
+    # fig_title3 = "(PAYEMS, seasonally adjusted) in last 15 recessions"
+    # fig.add_layout(
+    #     Title(
+    #         text=fig_title3,
+    #         text_font_style="bold",
+    #         text_font_size="16pt",
+    #         align="center",
+    #     ),
+    #     "above",
+    # )
+    # fig.add_layout(
+    #     Title(
+    #         text=fig_title2,
+    #         text_font_style="bold",
+    #         text_font_size="16pt",
+    #         align="center",
+    #     ),
+    #     "above",
+    # )
 
     # Add source text below figure
     updated_date_str = (
