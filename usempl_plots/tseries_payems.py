@@ -122,6 +122,10 @@ def gen_payems_tseries(
     usempl_imputed_cds = ColumnDataSource(usempl_imputed_df)
     usempl_annual_cds = ColumnDataSource(usempl_annual_df)
     usempl_monthly_cds = ColumnDataSource(usempl_monthly_df)
+    # print(usempl_monthly_df.keys())
+    # print(usempl_annual_df.keys())
+    # print(usempl_imputed_df.keys())
+    # print(usempl_annual_df[['Date', 'PAYEMS', 'BLS_annual']])
 
     # Create recession data column data source object
     recession_df = pd.read_csv(
@@ -135,6 +139,14 @@ def gen_payems_tseries(
     output_file(
         os.path.join(image_dir, filename), title=fig_title, mode="inline"
     )
+
+    # Format the tooltip
+    tooltips = [
+        ("Date", "@Date{%F}"),
+        ("Employed", "@PAYEMS{0,0.}"),
+        ("Change from prev. month", "@diff_monthly{0,0.}"),
+        ("Change from prev. year", "@diff_yoy{0,0.}"),
+    ]
 
     min_date = usempl_df["Date"].min()
     max_date = usempl_df["Date"].max()
@@ -163,7 +175,6 @@ def gen_payems_tseries(
             "undo",
             "redo",
             "reset",
-            "hover",
             "help",
         ],
         toolbar_location="left",
@@ -171,7 +182,6 @@ def gen_payems_tseries(
     fig.toolbar.logo = None
 
     # Set title font size and axes font sizes
-    fig.title.text_font_size = "18pt"
     fig.xaxis.axis_label_text_font_size = "12pt"
     fig.xaxis.major_label_text_font_size = "12pt"
     fig.yaxis.axis_label_text_font_size = "12pt"
@@ -191,13 +201,7 @@ def gen_payems_tseries(
 
     fig.yaxis.major_label_overrides = y_tick_label_dict
 
-    # # Modify tick intervals for X-axis and Y-axis
-    # fig.xaxis.ticker = SingleIntervalTicker(interval=10, num_minor_ticks=2)
-    # fig.xgrid.ticker = SingleIntervalTicker(interval=10)
-    # fig.yaxis.ticker = SingleIntervalTicker(interval=5, num_minor_ticks=5)
-    # fig.ygrid.ticker = SingleIntervalTicker(interval=5)
-
-    fig.line(
+    monthly = fig.line(
         x="Date",
         y="PAYEMS",
         source=usempl_monthly_cds,
@@ -209,7 +213,7 @@ def gen_payems_tseries(
         legend_label="Monthly data",
     )
 
-    fig.line(
+    imputed = fig.line(
         x="Date",
         y="PAYEMS",
         source=usempl_imputed_cds,
@@ -221,7 +225,7 @@ def gen_payems_tseries(
         legend_label="Interpolated from annual data",
     )
 
-    fig.scatter(
+    annual = fig.scatter(
         x="Date",
         y="PAYEMS",
         source=usempl_annual_cds,
@@ -272,15 +276,15 @@ def gen_payems_tseries(
                     legend_label="Recession",
                 )
 
-    # Add information on hover
-    # Format the tooltip
-    # tooltips = [
-    #     ("Date", "@Date{%Y-%m-%d}"),
-    #     ("Employment", "@PAYEMS{0,0.}"),
-    #     ("Monthly change", "@diff_monthly{0,0.}"),
-    #     ("Year-over-year change", "@diff_yoy{0,0.}"),
-    # ]
-    # fig.add_tools(HoverTool(tooltips=tooltips, formatters={'@Date': 'datetime'}))
+    hover = HoverTool(
+        tooltips=tooltips,
+        visible=False,
+        formatters={"@Date": "datetime"},
+    )
+    hover.renderers = [monthly, imputed]
+
+    # Add the HoverTool to the figure
+    fig.add_tools(hover)
 
     # Add legend
     fig.legend.location = "top_left"
@@ -291,6 +295,17 @@ def gen_payems_tseries(
 
     # Set legend muting click policy
     fig.legend.click_policy = "mute"
+
+    # Add title
+    fig.add_layout(
+        Title(
+            text=fig_title_str,
+            text_font_style="bold",
+            text_font_size="15pt",
+            align="center",
+        ),
+        "above",
+    )
 
     # Add notes below image. The list note_text_list contains a tuple with a
     # string for every line of the notes

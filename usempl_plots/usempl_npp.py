@@ -309,8 +309,8 @@ def get_usempl_data(
 
 
 def usempl_npp(
-    frwd_mths_main=53,
-    bkwd_mths_main=5,
+    frwd_mths_main=85,
+    bkwd_mths_main=7,
     frwd_mths_max=135,
     bkwd_mths_max=48,
     usempl_end_date="today",
@@ -447,8 +447,8 @@ def usempl_npp(
     fig = figure(
         height=450,
         width=800,
-        x_axis_label="Months from Peak",
-        y_axis_label="PAYEMS as fraction of Peak",
+        x_axis_label="Months from peak",
+        y_axis_label="Employment as fraction of peak",
         y_range=(
             min_main_val - fig_buffer_pct * datarange_main_vals,
             max_main_val + fig_buffer_pct * datarange_main_vals,
@@ -466,13 +466,12 @@ def usempl_npp(
             "undo",
             "redo",
             "reset",
-            "hover",
             "help",
         ],
         toolbar_location="left",
     )
-    fig.title.text_font_size = "18pt"
     fig.toolbar.logo = None
+
     l0 = fig.line(
         x="mths_frm_peak",
         y="usempl_dv_pk",
@@ -595,7 +594,7 @@ def usempl_npp(
         y="usempl_dv_pk",
         source=rec_cds_list[13],
         color=Category20[13][12],
-        line_width=2,
+        line_width=5,
         alpha=0.7,
         muted_alpha=0.15,
     )
@@ -685,27 +684,27 @@ def usempl_npp(
     #                      background_fill_color='white',
     #                      background_fill_alpha=1.0))
 
-    # # Add title and subtitle to the plot
-    # fig_title2 = "Progression of U.S. total nonfarm employment"
-    # fig_title3 = "(PAYEMS, seasonally adjusted) in last 15 recessions"
-    # fig.add_layout(
-    #     Title(
-    #         text=fig_title3,
-    #         text_font_style="bold",
-    #         text_font_size="16pt",
-    #         align="center",
-    #     ),
-    #     "above",
-    # )
-    # fig.add_layout(
-    #     Title(
-    #         text=fig_title2,
-    #         text_font_style="bold",
-    #         text_font_size="16pt",
-    #         align="center",
-    #     ),
-    #     "above",
-    # )
+    # Add title and subtitle to the plot
+    fig_title2 = "US nonfarm employment, normalized peak plot,"
+    fig_title3 = "comparison of last 15 recessions, 1929 to 2024"
+    fig.add_layout(
+        Title(
+            text=fig_title3,
+            text_font_style="bold",
+            text_font_size="15pt",
+            align="center",
+        ),
+        "above",
+    )
+    fig.add_layout(
+        Title(
+            text=fig_title2,
+            text_font_style="bold",
+            text_font_size="15pt",
+            align="center",
+        ),
+        "above",
+    )
 
     # Add source text below figure
     updated_date_str = (

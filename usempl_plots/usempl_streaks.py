@@ -33,10 +33,6 @@ def usempl_streaks(
     start_date="min",
     end_date="max",
     download_from_internet=True,
-    fig_title_strk=(
-        "US employment streaks: consecutive positive monthly gains and "
-        + "cumulative employment gains, 1939 to 2024"
-    ),
     scatter_histogram=True,
     table_output=True,
     html_show=True,
@@ -136,6 +132,7 @@ def usempl_streaks(
             "months_in_streak",
             "total_emp_gain",
             "avg_monthly_emp_gain",
+            "marker_color",
         ]
     )
     for i in range(usempl_df.shape[0]):
@@ -185,6 +182,7 @@ def usempl_streaks(
                     strk_mths,
                     strk_cum,
                     strk_cum / strk_mths,
+                    "",
                 ]
         elif (
             usempl_df.loc[i, "diff_monthly"] <= 0
@@ -212,6 +210,7 @@ def usempl_streaks(
                 strk_mths,
                 strk_cum,
                 strk_cum / strk_mths,
+                "",
             ]
             strk_mths = 0
             strk_cum = 0
@@ -219,10 +218,15 @@ def usempl_streaks(
     print("Number of streaks:", strk_num)
 
     # Create Bokeh plot of PAYEMS normalized peak plot figure
+    fig_title_lst = [
+        ("US employment streaks: consecutive positive monthly"),
+        ("gains and cumulative employment gains, 1939 to 2024"),
+    ]
+    fig_title_short = "Figure 1. US employment streaks"
     filename_strk = "usempl_streaks_" + end_date_str2 + ".html"
     output_file(
         os.path.join(image_dir, filename_strk),
-        title=fig_title_strk,
+        title=fig_title_short,
         mode="inline",
     )
 
@@ -300,6 +304,9 @@ def usempl_streaks(
     for i in range(strk_num):
         if max_cum_val_lst[i] > 10_000_000 or max_mth_val_lst[i] > 40:
             j += 1
+            strk_table_df.loc[strk_table_df.index == i, "marker_color"] = (
+                Viridis8[7 - j]
+            )
             li = fig_strk.line(
                 x="strk_mths",
                 y="strk_cum",
@@ -312,6 +319,12 @@ def usempl_streaks(
             )
             label_items_strk_lst.append((strk_label_lst[i], [li]))
         else:
+            # replace all values of strk_table_df["marker_color"] with "orange" if streak_table_df["months_in_streak"]<40 and streak_table_df["total_emp_gain"]<10_000_000
+            strk_table_df.loc[
+                (strk_table_df["months_in_streak"] < 40)
+                & (strk_table_df["total_emp_gain"] < 10_000_000),
+                "marker_color",
+            ] = "orange"
             li = fig_strk.line(
                 x="strk_mths",
                 y="strk_cum",
@@ -328,16 +341,18 @@ def usempl_streaks(
     fig_strk.add_layout(legend, "right")
     fig_strk.legend.click_policy = "mute"
 
-    # Add title and subtitle to the plot
-    fig_strk.add_layout(
-        Title(
-            text=fig_title_strk,
-            text_font_style="bold",
-            text_font_size="11pt",
-            align="center",
-        ),
-        "above",
-    )
+    # Add title and subtitle to the plot doing reverse loop through items in
+    # fig_title_lst
+    for title_line_str in fig_title_lst[::-1]:
+        fig_strk.add_layout(
+            Title(
+                text=title_line_str,
+                text_font_style="bold",
+                text_font_size="15pt",
+                align="center",
+            ),
+            "above",
+        )
 
     # Add source text below figure
     updated_date_str = (
@@ -382,7 +397,18 @@ def usempl_streaks(
                     (strk_table_df["months_in_streak"] >= 40)
                     | (strk_table_df["total_emp_gain"] >= 10_000_000)
                 )
-            ].sort_values(by="months_in_streak", ascending=False)
+            ][
+                [
+                    "strk_num",
+                    "start_date",
+                    "end_date",
+                    "months_in_streak",
+                    "total_emp_gain",
+                    "avg_monthly_emp_gain",
+                ]
+            ].sort_values(
+                by="months_in_streak", ascending=False
+            )
         )
 
     if html_show:
@@ -391,21 +417,22 @@ def usempl_streaks(
     fig_lst = [fig_strk]
 
     if scatter_histogram:
-        fig_title_scat = (
-            "US employment streaks: consecutive positive monthly gains and "
-            + "average monthly employment gains, 1939 to 2024"
-        )
+        fig_title_scat_lst = [
+            ("US employment streaks: consecutive positive monthly"),
+            ("gains and average monthly employment gains, 1939 to 2024"),
+        ]
+        fig_title_scat_short = "Figure 2. US employment streaks scatterplot"
         filename_scat = "usempl_streaks_scatter" + end_date_str2 + ".html"
         output_file(
             os.path.join(image_dir, filename_scat),
-            title=fig_title_scat,
+            title=fig_title_scat_short,
             mode="inline",
         )
 
         # Format the tooltip
         tooltips_scat = [
-            ("Start date", "@start_date{%F}"),
-            ("End date", "@end_date{%F}"),
+            ("Start date", "@start_date"),
+            ("End date", "@end_date"),
             ("Months in streak", "@months_in_streak{0.}"),
             ("Total employment gain", "@total_emp_gain{0,0.}"),
             ("Avg. monthly employment gain", "@avg_monthly_emp_gain{0,0.}"),
@@ -420,7 +447,7 @@ def usempl_streaks(
             height=500,
             width=700,
             x_axis_label="Streak length (months)",
-            y_axis_label="Avg. monthly employment gains (thousands)",
+            y_axis_label="Avg. monthly employment gains",
             x_minor_ticks=4,
             y_range=(
                 min_avg_val - fig_buffer_pct * datarange_avgmth_vals,
@@ -441,7 +468,6 @@ def usempl_streaks(
                 "undo",
                 "redo",
                 "reset",
-                "hover",
                 "help",
             ],
             toolbar_location="left",
@@ -465,37 +491,75 @@ def usempl_streaks(
 
         fig_scat.yaxis.major_label_overrides = y_tick_label_dict_scat
 
-        scat = fig_scat.scatter(
+        # Add scatter points for all streaks with months <40 and
+        # total employment gain < 10 mil
+        strk_table_other_cds = ColumnDataSource(
+            strk_table_df[
+                (strk_table_df["months_in_streak"] < 40)
+                & (strk_table_df["total_emp_gain"] < 10_000_000)
+            ]
+        )
+        strk_table_big_df = strk_table_df[
+            (strk_table_df["months_in_streak"] >= 40)
+            | (strk_table_df["total_emp_gain"] >= 10_000_000)
+        ].sort_values(by="strk_num", ascending=True)
+        strk_table_big_cds = ColumnDataSource(strk_table_big_df)
+
+        for strk in range(strk_table_big_df.shape[0]):
+            strk_table_i_cds = ColumnDataSource(strk_table_big_df.iloc[[strk]])
+            scat_i = fig_scat.scatter(
+                x="months_in_streak",
+                y="avg_monthly_emp_gain",
+                source=strk_table_i_cds,
+                size=8,
+                line_width=1,
+                line_color="black",
+                fill_color="marker_color",
+                alpha=0.6,
+                legend_label=(
+                    strk_table_big_df.iloc[strk]["start_date"]
+                    + " to "
+                    + strk_table_big_df.iloc[strk]["end_date"]
+                ),
+            )
+
+        scat_other = fig_scat.scatter(
             x="months_in_streak",
             y="avg_monthly_emp_gain",
-            source=strk_table_cds,
+            source=strk_table_other_cds,
             size=8,
             line_width=1,
             line_color="black",
-            fill_color="blue",
+            fill_color="marker_color",
             alpha=0.6,
+            legend_label="All other streaks",
         )
+        # Add legend
+        fig_scat.legend.location = "top_right"
+        fig_scat.legend.border_line_width = 2
+        fig_scat.legend.border_line_color = "black"
+        fig_scat.legend.border_line_alpha = 1
+        fig_scat.legend.label_text_font_size = "4mm"
+        fig_scat.legend.click_policy = "mute"
 
-        # Add title and subtitle to the plot
-        fig_scat.add_layout(
-            Title(
-                text=fig_title_scat,
-                text_font_style="bold",
-                text_font_size="14pt",
-                align="center",
-            ),
-            "above",
-        )
+        # Add title and subtitle to the plot doing reverse loop through items
+        # in fig_title_scat_lst
+        for title_line_str in fig_title_scat_lst[::-1]:
+            fig_scat.add_layout(
+                Title(
+                    text=title_line_str,
+                    text_font_style="bold",
+                    text_font_size="15pt",
+                    align="center",
+                ),
+                "above",
+            )
 
         # Add the HoverTool to the figure
         fig_scat.add_tools(
             HoverTool(
                 tooltips=tooltips_scat,
                 visible=False,
-                formatters={
-                    "@Start date": "datetime",
-                    "@End date": "datetime",
-                },
             )
         )
 
