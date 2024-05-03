@@ -7,7 +7,7 @@
 | Testing | ![example event parameter](https://github.com/OpenSourceEcon/usempl-plots/actions/workflows/build_and_test.yml/badge.svg) ![example event parameter](https://github.com/OpenSourceEcon/usempl-plots/actions/workflows/check_format.yml/badge.svg) [![codecov](https://codecov.io/gh/OpenSourceEcon/usempl-plots/branch/main/graph/badge.svg)](https://codecov.io/gh/OpenSourceEcon/usempl-plots) |
 
 
-The code in this repository makes up a package `usempl-plots` that can create multiple customizable and dynamic plots of US employment and unemployment by downloading multiple vintages of current data or using data in memory.
+The code in this repository makes up a package `usempl-plots` that can create multiple customizable and dynamic plots of US employment and unemployment by downloading multiple vintages of current data or using data in memory. The content for this `README.md` file is out of date as the following content only deals with the `usempl_npp.py` module. This will be updated in the near future.
 
 ## 1. Normalized peak plot of US nonfarm employment over past recessions
 
