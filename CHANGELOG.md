@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.0.5] - 2024-05-03 09:10:00
+
+### Added
+
+- Updates data and images to Apr. 2024 data
+- Adds industry module
+
+
 ## [0.0.4] - 2024-05-03 01:35:00
 
 ### Added
