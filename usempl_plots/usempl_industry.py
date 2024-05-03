@@ -82,25 +82,41 @@ def usempl_ind_chg(
     image_dir = os.path.join(cur_path, "images")
     data_dir = os.path.join(cur_path, "data")
 
-    data_df = pd.read_csv(os.path.join(
-        data_dir, "industry", "jobs_by_industry.csv"
-    ))
+    data_df = pd.read_csv(
+        os.path.join(data_dir, "industry", "jobs_by_industry.csv")
+    )
     data_df["diff_Sep03_Apr24"] = data_df["Apr24"] - data_df["Sep03"]
     data_df["pctchg_Sep03_Apr24"] = (
         (data_df["Apr24"] - data_df["Sep03"]) / data_df["Sep03"]
     ) * 100
 
-    print("Total jobs created from Sep. 2003 to Apr. 2024: ", int(
-        data_df.loc[data_df["Industry"] == "Total nonfarm", "diff_Sep03_Apr24"]
-    ))
+    print(
+        "Total jobs created from Sep. 2003 to Apr. 2024: ",
+        int(
+            data_df.loc[
+                data_df["Industry"] == "Total nonfarm", "diff_Sep03_Apr24"
+            ]
+        ),
+    )
     print("")
-    print("Percent change in jobs from Sep. 2003 to Apr. 2024:", data_df.loc[
-        data_df["Industry"] == "Total nonfarm", "pctchg_Sep03_Apr24"
-    ])
+    print(
+        "Percent change in jobs from Sep. 2003 to Apr. 2024:",
+        data_df.loc[
+            data_df["Industry"] == "Total nonfarm", "pctchg_Sep03_Apr24"
+        ],
+    )
     print("")
-    print(data_df[[
-        'Industry', 'Sep03', 'Apr24', 'diff_Sep03_Apr24', 'pctchg_Sep03_Apr24'
-    ]])
+    print(
+        data_df[
+            [
+                "Industry",
+                "Sep03",
+                "Apr24",
+                "diff_Sep03_Apr24",
+                "pctchg_Sep03_Apr24",
+            ]
+        ]
+    )
 
     return data_df
 
