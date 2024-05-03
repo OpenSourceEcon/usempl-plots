@@ -90,15 +90,17 @@ def usempl_ind_chg(
         (data_df["Mar24"] - data_df["Sep03"]) / data_df["Sep03"]
     ) * 100
 
-    print("Total jobs created from Sep. 2003 to Mar. 2024: {:,}".format(
+    print("Total jobs created from Sep. 2003 to Mar. 2024: ", int(
         data_df.loc[data_df["Industry"] == "Total nonfarm", "diff_Sep03_Mar24"]
-    )
-    print("")
-    print("Percent change in jobs from Sep. 2003 to Mar. 2024: {:.2f}%".format(
-        data_df.loc[data_df["Industry"] == "Total nonfarm", "pctchg_Sep03_Mar24"]
     ))
     print("")
-    print(data_df)
+    print("Percent change in jobs from Sep. 2003 to Mar. 2024:", data_df.loc[
+        data_df["Industry"] == "Total nonfarm", "pctchg_Sep03_Mar24"
+    ])
+    print("")
+    print(data_df[[
+        'Industry', 'Sep03', 'Mar24', 'diff_Sep03_Mar24', 'pctchg_Sep03_Mar24'
+    ]])
 
     return data_df
 
