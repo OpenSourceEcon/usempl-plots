@@ -10,31 +10,31 @@ This module defines the following function(s):
     usempl_ind_chg()
 
 The industries are:
-| Industry                                 | Series ID     |  Sep 2003   |   Mar 2024  | Apr 2024 |
-|------------------------------------------|---------------|-------------|-------------|----------|
-- Total nonfarm:                             CES0000000001   130_252_000   158_133_000
-  - Total private:                           CES0500000001   108_748_000   134_863_000
-    - Goods Producing:                       CES0600000001    21_700_000    21_812_000
-      - Mining and Logging                   CES1000000001       570_000       645_000
-      - Construction                         CES2000000001     6_783_000     8_211_000
-      - Manufacturing                        CES3000000001    14_347_000    12_956_000
-    - Private Service Providing:             CES0800000001    87_048_000   113_051_000
-      - Wholesale Trade                      CES4142000001     5_537_400     6_158_400
-      - Retail Trade                         CES4200000001    14_911_800    15_659_900
-      - Transportation and Warehousing       CES4300000001     4_162_100     6_540_500
-      - Utilities                            CES4422000001       573_100       588_000
-    - Information                            CES5000000001     3_162_000     3_017_000
-    - Financial Activities                   CES5500000001     8_100_000     9_226_000
-    - Professional and Business Services     CES6000000001    16_108_000    22_954_000
-    - Private Education and Health Services: CES6500000001    16_883_000    26_101_000
-      - Private Educational Services         CES6561000001     2_693_700     3_872_300
-      - Health Care and Social Assistance    CES6562000001    14_189_400    22_228_200
-    - Leisure and Hospitality                CES7000000001    12_208_000    16_905_000
-    - Other Services                         CES8000000001     5_403_000     5_901_000
-  - Government:                              CES9000000001    21_504_000    23_270_000
+| Industry                                 | Series ID     |  Sep 2003   |   Apr 2024  |
+|------------------------------------------|---------------|-------------|-------------|
+- Total nonfarm:                             CES0000000001   130_252_000   158_286_000
+  - Total private:                           CES0500000001   108_748_000   135_015_000
+    - Goods Producing:                       CES0600000001    21_700_000    21_821_000
+      - Mining and Logging                   CES1000000001       570_000       641_000
+      - Construction                         CES2000000001     6_783_000     8_219_000
+      - Manufacturing                        CES3000000001    14_347_000    12_961_000
+    - Private Service Providing:             CES0800000001    87_048_000   113_194_000
+      - Wholesale Trade                      CES4142000001     5_537_400     6_169_700
+      - Retail Trade                         CES4200000001    14_911_800    15_677_900
+      - Transportation and Warehousing       CES4300000001     4_162_100     6_575_800
+      - Utilities                            CES4422000001       573_100       587_400
+    - Information                            CES5000000001     3_162_000     3_013_000
+    - Financial Activities                   CES5500000001     8_100_000     9_233_000
+    - Professional and Business Services     CES6000000001    16_108_000    22_942_000
+    - Private Education and Health Services: CES6500000001    16_883_000    26_194_000
+      - Private Educational Services         CES6561000001     2_693_700     3_869_300
+      - Health Care and Social Assistance    CES6562000001    14_189_400    22_324_300
+    - Leisure and Hospitality                CES7000000001    12_208_000    16_897_000
+    - Other Services                         CES8000000001     5_403_000     5_904_000
+  - Government:                              CES9000000001    21_504_000    23_271_000
     - Federal Government                     CES9091000001     2_749_000     2_993_000
-    - State Government                       CES9092000001     4_980_000     5_444_000
-    - Local Government                       CES9093000001    13_775_000    14_833_000
+    - State Government                       CES9092000001     4_980_000     5_451_000
+    - Local Government                       CES9093000001    13_775_000    14_827_000
 
 Use this URL for API access: https://data.bls.gov/cgi-bin/srgate
 """
@@ -82,41 +82,25 @@ def usempl_ind_chg(
     image_dir = os.path.join(cur_path, "images")
     data_dir = os.path.join(cur_path, "data")
 
-    data_df = pd.read_csv(
-        os.path.join(data_dir, "industry", "jobs_by_industry.csv")
-    )
+    data_df = pd.read_csv(os.path.join(
+        data_dir, "industry", "jobs_by_industry.csv"
+    ))
     data_df["diff_Sep03_Mar24"] = data_df["Mar24"] - data_df["Sep03"]
     data_df["pctchg_Sep03_Mar24"] = (
         (data_df["Mar24"] - data_df["Sep03"]) / data_df["Sep03"]
     ) * 100
 
-    print(
-        "Total jobs created from Sep. 2003 to Mar. 2024: ",
-        int(
-            data_df.loc[
-                data_df["Industry"] == "Total nonfarm", "diff_Sep03_Mar24"
-            ]
-        ),
-    )
+    print("Total jobs created from Sep. 2003 to Mar. 2024: ", int(
+        data_df.loc[data_df["Industry"] == "Total nonfarm", "diff_Sep03_Mar24"]
+    ))
     print("")
-    print(
-        "Percent change in jobs from Sep. 2003 to Mar. 2024:",
-        data_df.loc[
-            data_df["Industry"] == "Total nonfarm", "pctchg_Sep03_Mar24"
-        ],
-    )
+    print("Percent change in jobs from Sep. 2003 to Mar. 2024:", data_df.loc[
+        data_df["Industry"] == "Total nonfarm", "pctchg_Sep03_Mar24"
+    ])
     print("")
-    print(
-        data_df[
-            [
-                "Industry",
-                "Sep03",
-                "Mar24",
-                "diff_Sep03_Mar24",
-                "pctchg_Sep03_Mar24",
-            ]
-        ]
-    )
+    print(data_df[[
+        'Industry', 'Sep03', 'Mar24', 'diff_Sep03_Mar24', 'pctchg_Sep03_Mar24'
+    ]])
 
     return data_df
 
