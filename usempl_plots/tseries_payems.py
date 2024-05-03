@@ -145,7 +145,7 @@ def gen_payems_tseries(
         ("Date", "@Date{%F}"),
         ("Employed", "@PAYEMS{0,0.}"),
         ("Change from prev. month", "@diff_monthly{0,0.}"),
-        ("Change from prev. year", "@diff_yoy{0,0.}")
+        ("Change from prev. year", "@diff_yoy{0,0.}"),
     ]
 
     min_date = usempl_df["Date"].min()

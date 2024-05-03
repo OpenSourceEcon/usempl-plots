@@ -132,7 +132,7 @@ def usempl_streaks(
             "months_in_streak",
             "total_emp_gain",
             "avg_monthly_emp_gain",
-            "marker_color"
+            "marker_color",
         ]
     )
     for i in range(usempl_df.shape[0]):
@@ -182,7 +182,7 @@ def usempl_streaks(
                     strk_mths,
                     strk_cum,
                     strk_cum / strk_mths,
-                    ""
+                    "",
                 ]
         elif (
             usempl_df.loc[i, "diff_monthly"] <= 0
@@ -210,7 +210,7 @@ def usempl_streaks(
                 strk_mths,
                 strk_cum,
                 strk_cum / strk_mths,
-                ""
+                "",
             ]
             strk_mths = 0
             strk_cum = 0
@@ -220,7 +220,7 @@ def usempl_streaks(
     # Create Bokeh plot of PAYEMS normalized peak plot figure
     fig_title_lst = [
         ("US employment streaks: consecutive positive monthly"),
-        ("gains and cumulative employment gains, 1939 to 2024")
+        ("gains and cumulative employment gains, 1939 to 2024"),
     ]
     fig_title_short = "Figure 1. US employment streaks"
     filename_strk = "usempl_streaks_" + end_date_str2 + ".html"
@@ -304,10 +304,9 @@ def usempl_streaks(
     for i in range(strk_num):
         if max_cum_val_lst[i] > 10_000_000 or max_mth_val_lst[i] > 40:
             j += 1
-            strk_table_df.loc[
-                strk_table_df.index == i,
-                "marker_color"
-            ] = Viridis8[7 - j]
+            strk_table_df.loc[strk_table_df.index == i, "marker_color"] = (
+                Viridis8[7 - j]
+            )
             li = fig_strk.line(
                 x="strk_mths",
                 y="strk_cum",
@@ -322,9 +321,9 @@ def usempl_streaks(
         else:
             # replace all values of strk_table_df["marker_color"] with "orange" if streak_table_df["months_in_streak"]<40 and streak_table_df["total_emp_gain"]<10_000_000
             strk_table_df.loc[
-                (strk_table_df["months_in_streak"] < 40) &
-                (strk_table_df["total_emp_gain"] < 10_000_000),
-                "marker_color"
+                (strk_table_df["months_in_streak"] < 40)
+                & (strk_table_df["total_emp_gain"] < 10_000_000),
+                "marker_color",
             ] = "orange"
             li = fig_strk.line(
                 x="strk_mths",
@@ -398,10 +397,18 @@ def usempl_streaks(
                     (strk_table_df["months_in_streak"] >= 40)
                     | (strk_table_df["total_emp_gain"] >= 10_000_000)
                 )
-            ][[
-                "strk_num", "start_date", "end_date", "months_in_streak",
-                "total_emp_gain", "avg_monthly_emp_gain"
-            ]].sort_values(by="months_in_streak", ascending=False)
+            ][
+                [
+                    "strk_num",
+                    "start_date",
+                    "end_date",
+                    "months_in_streak",
+                    "total_emp_gain",
+                    "avg_monthly_emp_gain",
+                ]
+            ].sort_values(
+                by="months_in_streak", ascending=False
+            )
         )
 
     if html_show:
@@ -412,7 +419,7 @@ def usempl_streaks(
     if scatter_histogram:
         fig_title_scat_lst = [
             ("US employment streaks: consecutive positive monthly"),
-            ("gains and average monthly employment gains, 1939 to 2024")
+            ("gains and average monthly employment gains, 1939 to 2024"),
         ]
         fig_title_scat_short = "Figure 2. US employment streaks scatterplot"
         filename_scat = "usempl_streaks_scatter" + end_date_str2 + ".html"
@@ -488,20 +495,18 @@ def usempl_streaks(
         # total employment gain < 10 mil
         strk_table_other_cds = ColumnDataSource(
             strk_table_df[
-                (strk_table_df["months_in_streak"] < 40) &
-                (strk_table_df["total_emp_gain"] < 10_000_000)
+                (strk_table_df["months_in_streak"] < 40)
+                & (strk_table_df["total_emp_gain"] < 10_000_000)
             ]
         )
         strk_table_big_df = strk_table_df[
-            (strk_table_df["months_in_streak"] >= 40) |
-            (strk_table_df["total_emp_gain"] >= 10_000_000)
+            (strk_table_df["months_in_streak"] >= 40)
+            | (strk_table_df["total_emp_gain"] >= 10_000_000)
         ].sort_values(by="strk_num", ascending=True)
         strk_table_big_cds = ColumnDataSource(strk_table_big_df)
 
         for strk in range(strk_table_big_df.shape[0]):
-            strk_table_i_cds = ColumnDataSource(
-                strk_table_big_df.iloc[[strk]]
-            )
+            strk_table_i_cds = ColumnDataSource(strk_table_big_df.iloc[[strk]])
             scat_i = fig_scat.scatter(
                 x="months_in_streak",
                 y="avg_monthly_emp_gain",
@@ -512,10 +517,10 @@ def usempl_streaks(
                 fill_color="marker_color",
                 alpha=0.6,
                 legend_label=(
-                    strk_table_big_df.iloc[strk]["start_date"] +
-                    " to " +
-                    strk_table_big_df.iloc[strk]["end_date"]
-                )
+                    strk_table_big_df.iloc[strk]["start_date"]
+                    + " to "
+                    + strk_table_big_df.iloc[strk]["end_date"]
+                ),
             )
 
         scat_other = fig_scat.scatter(
