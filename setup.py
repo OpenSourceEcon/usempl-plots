@@ -7,7 +7,7 @@ with open("README.md", "r") as readme_file:
 
 setup(
     name="usempl-plots",
-    version="0.0.3",
+    version="0.0.4",
     author="Richard W. Evans",
     license="CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
     description="Package for creating plots of US employment and unemployment",
@@ -21,7 +21,6 @@ setup(
         "Natural Language :: English",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Topic :: Scientific/Engineering :: Information Analysis",
@@ -36,7 +35,7 @@ setup(
     packages=find_packages(),
     package_data={"usempl_plots": ["data/*"]},
     include_packages=True,
-    python_requires=">=3.10",
+    python_requires=">=3.11",
     install_requires=[
         "numpy>=1.23.4",
         "scipy>=1.9.3",
