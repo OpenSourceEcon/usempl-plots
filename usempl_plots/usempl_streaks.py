@@ -19,8 +19,16 @@ from usempl_plots.get_payems import get_payems_data
 from bokeh.io import output_file
 from bokeh.plotting import curdoc, figure, show
 from bokeh.models import (
-    ColumnDataSource, Title, Label, Legend, HoverTool, LabelSet,
-    Arrow, NormalHead, OpenHead, VeeHead
+    ColumnDataSource,
+    Title,
+    Label,
+    Legend,
+    HoverTool,
+    LabelSet,
+    Arrow,
+    NormalHead,
+    OpenHead,
+    VeeHead,
 )
 from bokeh.layouts import gridplot
 
@@ -40,7 +48,7 @@ def usempl_streaks(
     table_output=True,
     html_show=True,
     indicate_recent_line=None,
-    indicate_recent_scat=None
+    indicate_recent_scat=None,
 ):
     """
     This function creates the HTML and JavaScript code for the dynamic
@@ -428,19 +436,31 @@ def usempl_streaks(
     if indicate_recent_line is not None:
         # Add a text box and arrow indicating the recent streak
         (
-            box_text, x_boxcoord, y_boxcoord, x_arrowstart, y_arrowstart,
-            x_arrowend, y_arrowend
+            box_text,
+            x_boxcoord,
+            y_boxcoord,
+            x_arrowstart,
+            y_arrowstart,
+            x_arrowend,
+            y_arrowend,
         ) = indicate_recent_line
         curr_strk_indic_box = Label(
-            x=x_boxcoord, y=y_boxcoord, x_units='screen', y_units='screen',
-            text=" " + box_text, text_font_size='10pt',
-            border_line_color='black'
+            x=x_boxcoord,
+            y=y_boxcoord,
+            x_units="screen",
+            y_units="screen",
+            text=" " + box_text,
+            text_font_size="10pt",
+            border_line_color="black",
         )
         fig_strk.add_layout(curr_strk_indic_box)
         curr_strk_indic_arrow_head = VeeHead(size=5, fill_color="black")
         curr_strk_indic_arrow = Arrow(
-            end=curr_strk_indic_arrow_head, x_start=x_arrowstart,
-            y_start=y_arrowstart, x_end=x_arrowend, y_end=y_arrowend
+            end=curr_strk_indic_arrow_head,
+            x_start=x_arrowstart,
+            y_start=y_arrowstart,
+            x_end=x_arrowend,
+            y_end=y_arrowend,
         )
         fig_strk.add_layout(curr_strk_indic_arrow)
 
@@ -578,19 +598,31 @@ def usempl_streaks(
         if indicate_recent_scat is not None:
             # Add a text box and arrow indicating the recent streak
             (
-                box_text, x_boxcoord, y_boxcoord, x_arrowstart, y_arrowstart,
-                x_arrowend, y_arrowend
+                box_text,
+                x_boxcoord,
+                y_boxcoord,
+                x_arrowstart,
+                y_arrowstart,
+                x_arrowend,
+                y_arrowend,
             ) = indicate_recent_scat
             curr_strk_indic_box = Label(
-                x=x_boxcoord, y=y_boxcoord, x_units='screen', y_units='screen',
-                text=" " + box_text, text_font_size='10pt',
-                border_line_color='black'
+                x=x_boxcoord,
+                y=y_boxcoord,
+                x_units="screen",
+                y_units="screen",
+                text=" " + box_text,
+                text_font_size="10pt",
+                border_line_color="black",
             )
             fig_scat.add_layout(curr_strk_indic_box)
             curr_strk_indic_arrow_head = VeeHead(size=5, fill_color="black")
             curr_strk_indic_arrow = Arrow(
-                end=curr_strk_indic_arrow_head, x_start=x_arrowstart,
-                y_start=y_arrowstart, x_end=x_arrowend, y_end=y_arrowend
+                end=curr_strk_indic_arrow_head,
+                x_start=x_arrowstart,
+                y_start=y_arrowstart,
+                x_end=x_arrowend,
+                y_end=y_arrowend,
             )
             fig_scat.add_layout(curr_strk_indic_arrow)
 
