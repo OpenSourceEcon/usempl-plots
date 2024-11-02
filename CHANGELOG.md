@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.0.8] - 2024-11-02 04:30:00
+
+### Added
+
+- Added setuptools install in `publish_to_pypi.yml` to get the GH Action to work
+
 ## [0.0.7] - 2024-11-02 03:00:00
 
 ### Added
@@ -69,6 +75,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This is the first release of the usempl-plots package.
 
 
+[0.0.8]: https://github.com/OpenSourceEcon/usempl-plots/compare/v0.0.7...v0.0.8
 [0.0.7]: https://github.com/OpenSourceEcon/usempl-plots/compare/v0.0.6...v0.0.7
 [0.0.6]: https://github.com/OpenSourceEcon/usempl-plots/compare/v0.0.5...v0.0.6
 [0.0.5]: https://github.com/OpenSourceEcon/usempl-plots/compare/v0.0.4...v0.0.5

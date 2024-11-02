@@ -1,17 +1,15 @@
-"""This file contains the usempl-plots package's metadata and dependencies."""
-
 from setuptools import find_packages, setup
 
-with open("README.md", "r") as readme_file:
-    readme = readme_file.read()
+with open("README.md", "r", encoding="utf-8") as readme_file:
+    longdesc = readme_file.read()
 
 setup(
     name="usempl-plots",
-    version="0.0.7",
+    version="0.0.8",
     author="Richard W. Evans",
     license="CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
     description="Package for creating plots of US employment and unemployment",
-    long_description=readme,
+    long_description=longdesc,
     long_description_content_type="text/markdown",
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
@@ -35,7 +33,7 @@ setup(
     packages=find_packages(),
     package_data={"usempl_plots": ["data/*"]},
     include_packages=True,
-    python_requires=">=3.11",
+    python_requires=">=3.12",
     install_requires=[
         "numpy>=1.23.4",
         "scipy>=1.9.3",
