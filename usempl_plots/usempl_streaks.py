@@ -18,7 +18,10 @@ import os
 from usempl_plots.get_payems import get_payems_data
 from bokeh.io import output_file
 from bokeh.plotting import curdoc, figure, show
-from bokeh.models import ColumnDataSource, Title, Legend, HoverTool, LabelSet
+from bokeh.models import (
+    ColumnDataSource, Title, Label, Legend, HoverTool, LabelSet,
+    Arrow, NormalHead, OpenHead, VeeHead
+)
 from bokeh.layouts import gridplot
 
 # from bokeh.models import Label
@@ -36,6 +39,8 @@ def usempl_streaks(
     scatter_histogram=True,
     table_output=True,
     html_show=True,
+    indicate_recent_line=None,
+    indicate_recent_scat=None
 ):
     """
     This function creates the HTML and JavaScript code for the dynamic
@@ -45,6 +50,12 @@ def usempl_streaks(
     Args:
         start_date (str): start date of PAYEMS time series in 'YYYY-mm-dd'
             format or 'min'
+        indicate_recent_line (None or tuple): for current streak line plot
+            indicator text box, length-7 tuple ("box_text", x_boxcoord,
+            y_boxcoord, x_arrowstart, y_arrowstart, x_arrowend, y_arrowend)
+        indicate_recent_scat (None or tuple): for current streak scatterplot
+            indicator text box, length-7 tuple ("box_text", x_boxcoord,
+            y_boxcoord, x_arrowstart, y_arrowstart, x_arrowend, y_arrowend)
     """
     # Create data and images directory paths
     cur_path = os.path.split(os.path.abspath(__file__))[0]
@@ -299,6 +310,7 @@ def usempl_streaks(
     fig_strk.yaxis.major_label_overrides = y_tick_label_dict_strk
 
     fig_lst_strk = []
+    all_other_line_lst = []
     label_items_strk_lst = []
     j = -1
     for i in range(strk_num):
@@ -334,7 +346,9 @@ def usempl_streaks(
                 alpha=0.7,
                 muted_alpha=0.15,
             )
+            all_other_line_lst.append(li)
         fig_lst_strk.append(li)
+    label_items_strk_lst.append(("All other streaks", all_other_line_lst))
 
     # Add legend
     legend = Legend(items=label_items_strk_lst, location="center")
@@ -410,6 +424,25 @@ def usempl_streaks(
                 by="months_in_streak", ascending=False
             )
         )
+
+    if indicate_recent_line is not None:
+        # Add a text box and arrow indicating the recent streak
+        (
+            box_text, x_boxcoord, y_boxcoord, x_arrowstart, y_arrowstart,
+            x_arrowend, y_arrowend
+        ) = indicate_recent_line
+        curr_strk_indic_box = Label(
+            x=x_boxcoord, y=y_boxcoord, x_units='screen', y_units='screen',
+            text=" " + box_text, text_font_size='10pt',
+            border_line_color='black'
+        )
+        fig_strk.add_layout(curr_strk_indic_box)
+        curr_strk_indic_arrow_head = VeeHead(size=5, fill_color="black")
+        curr_strk_indic_arrow = Arrow(
+            end=curr_strk_indic_arrow_head, x_start=x_arrowstart,
+            y_start=y_arrowstart, x_end=x_arrowend, y_end=y_arrowend
+        )
+        fig_strk.add_layout(curr_strk_indic_arrow)
 
     if html_show:
         show(fig_strk)
@@ -541,6 +574,25 @@ def usempl_streaks(
         fig_scat.legend.border_line_alpha = 1
         fig_scat.legend.label_text_font_size = "4mm"
         fig_scat.legend.click_policy = "mute"
+
+        if indicate_recent_scat is not None:
+            # Add a text box and arrow indicating the recent streak
+            (
+                box_text, x_boxcoord, y_boxcoord, x_arrowstart, y_arrowstart,
+                x_arrowend, y_arrowend
+            ) = indicate_recent_scat
+            curr_strk_indic_box = Label(
+                x=x_boxcoord, y=y_boxcoord, x_units='screen', y_units='screen',
+                text=" " + box_text, text_font_size='10pt',
+                border_line_color='black'
+            )
+            fig_scat.add_layout(curr_strk_indic_box)
+            curr_strk_indic_arrow_head = VeeHead(size=5, fill_color="black")
+            curr_strk_indic_arrow = Arrow(
+                end=curr_strk_indic_arrow_head, x_start=x_arrowstart,
+                y_start=y_arrowstart, x_end=x_arrowend, y_end=y_arrowend
+            )
+            fig_scat.add_layout(curr_strk_indic_arrow)
 
         # Add title and subtitle to the plot doing reverse loop through items
         # in fig_title_scat_lst
