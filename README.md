@@ -3,7 +3,7 @@
 | | |
 | --- | --- |
 | Org | [![OSE Lab cataloged](https://img.shields.io/badge/OSE%20Lab-catalogued-critical)](https://www.oselab.org/gallery) [![OS License: CCO-1.0](https://img.shields.io/badge/OS%20License-CCO%201.0-yellow)](https://github.com/OpenSourceEcon/usempl-plots/blob/main/LICENSE) |
-| Package | [![Python 3.11](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3119/) [![PyPI Latest Release](https://img.shields.io/pypi/v/usempl-plots.svg)](https://pypi.org/project/usempl-plots/) [![PyPI Downloads](https://img.shields.io/pypi/dm/usempl-plots.svg?label=PyPI%20downloads)](https://pypi.org/project/usempl-plots/) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) |
+| Package | [![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/release/python-3130/) [![PyPI Latest Release](https://img.shields.io/pypi/v/usempl-plots.svg)](https://pypi.org/project/usempl-plots/) [![PyPI Downloads](https://img.shields.io/pypi/dm/usempl-plots.svg?label=PyPI%20downloads)](https://pypi.org/project/usempl-plots/) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) |
 | Testing | ![example event parameter](https://github.com/OpenSourceEcon/usempl-plots/actions/workflows/build_and_test.yml/badge.svg) ![example event parameter](https://github.com/OpenSourceEcon/usempl-plots/actions/workflows/check_format.yml/badge.svg) [![codecov](https://codecov.io/gh/OpenSourceEcon/usempl-plots/branch/main/graph/badge.svg)](https://codecov.io/gh/OpenSourceEcon/usempl-plots) |
 
 
