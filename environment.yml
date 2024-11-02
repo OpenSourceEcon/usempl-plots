@@ -2,8 +2,10 @@ name: usempl-plots-dev
 channels:
 - conda-forge
 dependencies:
-  - python>=3.11
+  - python>=3.12
   - ipython
+  - jupyter
+  - ipykernel
   - numpy>=1.23.4
   - scipy>=1.9.3
   - pandas>=1.5.2
