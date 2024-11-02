@@ -1,4 +1,4 @@
-name: Build and test [Python 3.13]
+name: Build and test
 
 on:
   push:
@@ -6,11 +6,15 @@ on:
     paths:
       - '**.yml'
       - '**.csv'
+      - '**.py'
+      - '**.ipynb'
   pull_request:
     branches:  [main]
     paths:
       - '**.yml'
       - '**.csv'
+      - '**.py'
+      - '**.ipynb'
 
 jobs:
   build:
@@ -18,7 +22,7 @@ jobs:
     strategy:
       matrix:
         os:  [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.13"]
+        python-version: ["3.12", "3.13"]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
