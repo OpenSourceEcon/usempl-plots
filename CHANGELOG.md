@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.0.7] - 2024-11-02 03:00:00
+
+### Added
+
+- Updates the plots to 2024-10 employment data
+- Updates the `environment.yml` file
+
 ## [0.0.6] - 2024-05-03 10:10:00
 
 ### Added
@@ -60,6 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - This is the first release of the usempl-plots package.
 
 
+[0.0.7]: https://github.com/OpenSourceEcon/usempl-plots/compare/v0.0.6...v0.0.7
 [0.0.6]: https://github.com/OpenSourceEcon/usempl-plots/compare/v0.0.5...v0.0.6
 [0.0.5]: https://github.com/OpenSourceEcon/usempl-plots/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/OpenSourceEcon/usempl-plots/compare/v0.0.3...v0.0.4

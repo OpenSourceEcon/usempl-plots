@@ -8,4 +8,4 @@ from usempl_plots.usempl_industry import *
 from usempl_plots.usempl_npp import *
 from usempl_plots.usempl_streaks import *
 
-__version__ = "0.0.6"
+__version__ = "0.0.7"
