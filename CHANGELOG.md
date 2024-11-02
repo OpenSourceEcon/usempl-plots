@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updates the plots to 2024-10 employment data
 - Updates the `environment.yml` file
+- Updates `build_and_test.yml`
+- Updates `usempl_streaks.py`
 
 ## [0.0.6] - 2024-05-03 10:10:00
 
