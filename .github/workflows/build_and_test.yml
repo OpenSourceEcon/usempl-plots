@@ -31,7 +31,7 @@ jobs:
       - name: Setup Miniconda using Python ${{ matrix.python-version }}
         uses: conda-incubator/setup-miniconda@v3
         with:
-          miniforge-variant: Mambaforge
+          miniconda-version: "latest"
           auto-update-conda: true
           activate-environment: usempl-plots-dev
           environment-file: environment.yml
@@ -50,8 +50,9 @@ jobs:
         shell: bash -l {0}
         working-directory: ./
         run: |
-          pytest -m 'not local' --cov=./ --cov-report=xml --maxfail=0
+          python -m pytest -m 'not local' --cov=./ --cov-report=xml --maxfail=0
       - name: Upload coverage to Codecov
+        if: matrix.os == 'ubuntu-latest' && contains(github.repository, 'OpenSourceEcon/usempl-plots')
         uses: codecov/codecov-action@v4
         with:
           files: ./coverage.xml
