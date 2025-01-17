@@ -34,9 +34,10 @@ def gen_payems_tseries(
     recession_bars=True,
     download=True,
     fig_title_str=(
-        "Time Series of US Monthly Nonfarm Payroll Employment (PAYEMS)"
+        "US Total Monthly Nonfarm Payroll Employment (PAYEMS)"
     ),
     html_show=True,
+    save_plot=True
 ):
     """
     This function creates a simple time series plot of US nonfarm payroll
@@ -45,10 +46,23 @@ def gen_payems_tseries(
     Args:
         start_date (str): start date of PAYEMS time series in 'YYYY-mm-dd'
             format or 'min'
+        fig_title_str (None or str): title of the figure if non None
+        save_plot (bool or path): whether or not to save plot html file and
+            path to save file if True
     """
     # Create data and images directory as well as recession data path
     cur_path = os.path.split(os.path.abspath(__file__))[0]
-    image_dir = os.path.join(cur_path, "images")
+    if save_plot is True or isinstance(save_plot, str):
+        if save_plot is True:
+            image_dir = os.path.join(cur_path, "images")
+        elif isinstance(save_plot, str):
+            if os.path.exists(save_plot):
+                image_dir = save_plot
+            else:
+                err_msg = (
+                    "gen_payems_tseries ERROR: save_plot path does not exist."
+                )
+                raise ValueError(err_msg)
     data_dir = os.path.join(cur_path, "data")
     recession_data_path = os.path.join(data_dir, "recession_data.csv")
 
@@ -138,9 +152,10 @@ def gen_payems_tseries(
     # Create Bokeh plot of PAYEMS time series
     fig_title = fig_title_str
     filename = "tseries_payems_" + end_date_str2 + ".html"
-    output_file(
-        os.path.join(image_dir, filename), title=fig_title, mode="inline"
-    )
+    if save_plot is True or isinstance(save_plot, str):
+        output_file(
+            os.path.join(image_dir, filename), title=fig_title, mode="inline"
+        )
 
     # Format the tooltip
     tooltips = [
@@ -302,16 +317,17 @@ def gen_payems_tseries(
     # Set legend muting click policy
     fig.legend.click_policy = "mute"
 
-    # Add title
-    fig.add_layout(
-        Title(
-            text=fig_title_str,
-            text_font_style="bold",
-            text_font_size="15pt",
-            align="center",
-        ),
-        "above",
-    )
+    if fig_title_str is not None:
+        # Add title
+        fig.add_layout(
+            Title(
+                text=fig_title_str,
+                text_font_style="bold",
+                text_font_size="15pt",
+                align="center",
+            ),
+            "above",
+        )
 
     # Add notes below image. The list note_text_list contains a tuple with a
     # string for every line of the notes
