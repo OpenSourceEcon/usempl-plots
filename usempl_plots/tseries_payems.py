@@ -2,6 +2,7 @@
 import numpy as np
 import pandas as pd
 import datetime as dt
+from dateutil.relativedelta import relativedelta
 import os
 from usempl_plots.get_payems import get_payems_data
 
@@ -16,6 +17,7 @@ from bokeh.models import (
     Title,
     Legend,
     HoverTool,
+    DatetimeTickFormatter,
     NumeralTickFormatter,
 )
 
@@ -164,7 +166,9 @@ def gen_payems_tseries(
             max_y_val + fig_buffer_pct * range_y_vals,
         ),
         y_minor_ticks=2,
-        x_range=(min_date, max_date),
+        x_range=(
+            min_date-relativedelta(years=1), max_date+relativedelta(years=1)
+        ),
         x_minor_ticks=2,
         tools=[
             "save",
@@ -188,6 +192,8 @@ def gen_payems_tseries(
     fig.yaxis.major_label_text_font_size = "12pt"
 
     # Reformat the labels for the ticks on the x and y axes
+    fig.xaxis.ticker.desired_num_ticks = 10
+
     y_tick_label_dict = {
         20_000_000: "20m",
         40_000_000: "40m",
