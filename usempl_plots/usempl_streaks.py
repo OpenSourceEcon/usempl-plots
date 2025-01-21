@@ -46,9 +46,18 @@ def usempl_streaks(
     download_from_internet=True,
     scatter_histogram=True,
     table_output=True,
+    fig_line_title_lst=[
+        ("US employment streaks: consecutive positive monthly"),
+        ("gains and cumulative employment gains")
+    ],
+    fig_scat_title_lst=[
+        ("US employment streaks: consecutive positive monthly"),
+        ("gains and average monthly employment gains")
+    ],
     html_show=True,
     indicate_recent_line=None,
     indicate_recent_scat=None,
+    save_plot=True
 ):
     """
     This function creates the HTML and JavaScript code for the dynamic
@@ -58,17 +67,42 @@ def usempl_streaks(
     Args:
         start_date (str): start date of PAYEMS time series in 'YYYY-mm-dd'
             format or 'min'
+        fig_line_title_lst (None or list of strings): multiline title strings
+            for the line plot figure if not None
+        fig_scat_title_lst (None or list of strings): multiline title strings
+            for the scatterplot figure if not None
         indicate_recent_line (None or tuple): for current streak line plot
             indicator text box, length-7 tuple ("box_text", x_boxcoord,
             y_boxcoord, x_arrowstart, y_arrowstart, x_arrowend, y_arrowend)
         indicate_recent_scat (None or tuple): for current streak scatterplot
             indicator text box, length-7 tuple ("box_text", x_boxcoord,
             y_boxcoord, x_arrowstart, y_arrowstart, x_arrowend, y_arrowend)
+        save_plot (bool or path): whether or not to save plots html files and
+            path to save file if True
+
+    Returns:
+        fig_lst (list of figures): list of Bokeh figures
+        beg_date_str2 (str): start date of PAYEMS time series in 'YYYY-mm-dd'
+            format
+        end_date_str2 (str): end date of PAYEMS time series in 'YYYY-mm-dd'
+            format
+        strk_table_df (DataFrame): table of streaks
     """
     # Create data and images directory paths
     cur_path = os.path.split(os.path.abspath(__file__))[0]
-    image_dir = os.path.join(cur_path, "images")
     data_dir = os.path.join(cur_path, "data")
+    if save_plot is True or isinstance(save_plot, str):
+        if save_plot is True:
+            image_dir = os.path.join(cur_path, "images")
+        elif isinstance(save_plot, str):
+            if os.path.exists(save_plot):
+                image_dir = save_plot
+            else:
+                err_msg = (
+                    "Error usempl_streaks.py: save_plot directory does not "
+                    + "exist."
+                )
+                raise ValueError(err_msg)
 
     # Get the employment data
     if start_date == "min":
@@ -236,18 +270,15 @@ def usempl_streaks(
 
     print("Number of streaks:", strk_num)
 
-    # Create Bokeh plot of PAYEMS normalized peak plot figure
-    fig_title_lst = [
-        ("US employment streaks: consecutive positive monthly"),
-        ("gains and cumulative employment gains, 1939 to 2024"),
-    ]
-    fig_title_short = "Figure 1. US employment streaks"
+    # Create Bokeh plot of PAYEMS streaks line plot figure
+    fig_line_title_short = "US employment streaks line plot"
     filename_strk = "usempl_streaks_" + end_date_str2 + ".html"
-    output_file(
-        os.path.join(image_dir, filename_strk),
-        title=fig_title_short,
-        mode="inline",
-    )
+    if save_plot is True or isinstance(save_plot, str):
+        output_file(
+            os.path.join(image_dir, filename_strk),
+            title=fig_line_title_short,
+            mode="inline",
+        )
 
     # Format the tooltip
     tooltips = [
@@ -364,17 +395,18 @@ def usempl_streaks(
     fig_strk.legend.click_policy = "mute"
 
     # Add title and subtitle to the plot doing reverse loop through items in
-    # fig_title_lst
-    for title_line_str in fig_title_lst[::-1]:
-        fig_strk.add_layout(
-            Title(
-                text=title_line_str,
-                text_font_style="bold",
-                text_font_size="15pt",
-                align="center",
-            ),
-            "above",
-        )
+    # fig_line_title_lst
+    if fig_line_title_lst is not None:
+        for title_line_str in fig_line_title_lst[::-1]:
+            fig_strk.add_layout(
+                Title(
+                    text=title_line_str,
+                    text_font_style="bold",
+                    text_font_size="14pt",
+                    align="center",
+                ),
+                "above",
+            )
 
     # Add source text below figure
     updated_date_str = (
@@ -411,6 +443,21 @@ def usempl_streaks(
 
     if table_output:
         print("")
+        print("Print a table of all streaks.")
+        print("")
+        print(
+            strk_table_df[
+                [
+                    "strk_num",
+                    "start_date",
+                    "end_date",
+                    "months_in_streak",
+                    "total_emp_gain",
+                    "avg_monthly_emp_gain",
+                ]
+            ]
+        )
+        print("")
         print("Print a table of streaks with +40 months or +10,000,000 jobs.")
         print("")
         print(
@@ -429,8 +476,22 @@ def usempl_streaks(
                     "avg_monthly_emp_gain",
                 ]
             ].sort_values(
-                by="months_in_streak", ascending=False
+                by=["months_in_streak", "avg_monthly_emp_gain"],
+                ascending=[False, False]
             )
+        )
+        print("")
+        print(
+            strk_table_df[strk_table_df["months_in_streak"] == 1][
+                [
+                    "strk_num",
+                    "start_date",
+                    "end_date",
+                    "months_in_streak",
+                    "total_emp_gain",
+                    "avg_monthly_emp_gain",
+                ]
+            ]
         )
 
     if indicate_recent_line is not None:
@@ -470,17 +531,14 @@ def usempl_streaks(
     fig_lst = [fig_strk]
 
     if scatter_histogram:
-        fig_title_scat_lst = [
-            ("US employment streaks: consecutive positive monthly"),
-            ("gains and average monthly employment gains, 1939 to 2024"),
-        ]
-        fig_title_scat_short = "Figure 2. US employment streaks scatterplot"
+        fig_title_scat_short = "US employment streaks scatterplot"
         filename_scat = "usempl_streaks_scatter" + end_date_str2 + ".html"
-        output_file(
-            os.path.join(image_dir, filename_scat),
-            title=fig_title_scat_short,
-            mode="inline",
-        )
+        if save_plot is True or isinstance(save_plot, str):
+            output_file(
+                os.path.join(image_dir, filename_scat),
+                title=fig_title_scat_short,
+                mode="inline",
+            )
 
         # Format the tooltip
         tooltips_scat = [
@@ -628,16 +686,17 @@ def usempl_streaks(
 
         # Add title and subtitle to the plot doing reverse loop through items
         # in fig_title_scat_lst
-        for title_line_str in fig_title_scat_lst[::-1]:
-            fig_scat.add_layout(
-                Title(
-                    text=title_line_str,
-                    text_font_style="bold",
-                    text_font_size="15pt",
-                    align="center",
-                ),
-                "above",
-            )
+        if fig_scat_title_lst is not None:
+            for title_line_str in fig_scat_title_lst[::-1]:
+                fig_scat.add_layout(
+                    Title(
+                        text=title_line_str,
+                        text_font_style="bold",
+                        text_font_size="14pt",
+                        align="center",
+                    ),
+                    "above",
+                )
 
         # Add the HoverTool to the figure
         fig_scat.add_tools(
@@ -839,14 +898,9 @@ def usempl_streaks(
         # fig_lst.append(fig_scat)
         fig_lst.append(layout)
 
-    return fig_lst, beg_date_str2, end_date_str2
-
-
-# def usempl_streaks_hist():
-
-#     return fig, beg_date_str2, end_date_str2
+    return fig_lst, beg_date_str2, end_date_str2, strk_table_df
 
 
 if __name__ == "__main__":
     # execute only if run as a script
-    fig_lst, beg_date_str, end_date_str = usempl_streaks()
+    fig_lst, beg_date_str, end_date_str, strk_table_df = usempl_streaks()

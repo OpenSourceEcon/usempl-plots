@@ -46,12 +46,14 @@ def gen_payems_tseries(
     Args:
         start_date (str): start date of PAYEMS time series in 'YYYY-mm-dd'
             format or 'min'
-        fig_title_str (None or str): title of the figure if non None
+        fig_title_str (None or str): title of the figure if not None
         save_plot (bool or path): whether or not to save plot html file and
             path to save file if True
     """
     # Create data and images directory as well as recession data path
     cur_path = os.path.split(os.path.abspath(__file__))[0]
+    data_dir = os.path.join(cur_path, "data")
+    recession_data_path = os.path.join(data_dir, "recession_data.csv")
     if save_plot is True or isinstance(save_plot, str):
         if save_plot is True:
             image_dir = os.path.join(cur_path, "images")
@@ -63,8 +65,6 @@ def gen_payems_tseries(
                     "gen_payems_tseries ERROR: save_plot path does not exist."
                 )
                 raise ValueError(err_msg)
-    data_dir = os.path.join(cur_path, "data")
-    recession_data_path = os.path.join(data_dir, "recession_data.csv")
 
     # Get the employment data
     if start_date == "min":
@@ -323,7 +323,7 @@ def gen_payems_tseries(
             Title(
                 text=fig_title_str,
                 text_font_style="bold",
-                text_font_size="15pt",
+                text_font_size="14pt",
                 align="center",
             ),
             "above",

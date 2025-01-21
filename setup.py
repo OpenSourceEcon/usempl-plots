@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as readme_file:
 
 setup(
     name="usempl-plots",
-    version="0.0.8",
+    version="0.0.9",
     author="Richard W. Evans",
     license="CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
     description="Package for creating plots of US employment and unemployment",
