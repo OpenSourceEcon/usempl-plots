@@ -48,16 +48,16 @@ def usempl_streaks(
     table_output=True,
     fig_line_title_lst=[
         ("US employment streaks: consecutive positive monthly"),
-        ("gains and cumulative employment gains")
+        ("gains and cumulative employment gains"),
     ],
     fig_scat_title_lst=[
         ("US employment streaks: consecutive positive monthly"),
-        ("gains and average monthly employment gains")
+        ("gains and average monthly employment gains"),
     ],
     html_show=True,
     indicate_recent_line=None,
     indicate_recent_scat=None,
-    save_plot=True
+    save_plot=True,
 ):
     """
     This function creates the HTML and JavaScript code for the dynamic
@@ -477,7 +477,7 @@ def usempl_streaks(
                 ]
             ].sort_values(
                 by=["months_in_streak", "avg_monthly_emp_gain"],
-                ascending=[False, False]
+                ascending=[False, False],
             )
         )
         print("")

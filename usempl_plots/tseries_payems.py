@@ -33,11 +33,9 @@ def gen_payems_tseries(
     end_date="max",
     recession_bars=True,
     download=True,
-    fig_title_str=(
-        "US Total Monthly Nonfarm Payroll Employment (PAYEMS)"
-    ),
+    fig_title_str=("US Total Monthly Nonfarm Payroll Employment (PAYEMS)"),
     html_show=True,
-    save_plot=True
+    save_plot=True,
 ):
     """
     This function creates a simple time series plot of US nonfarm payroll
@@ -182,7 +180,8 @@ def gen_payems_tseries(
         ),
         y_minor_ticks=2,
         x_range=(
-            min_date-relativedelta(years=1), max_date+relativedelta(years=1)
+            min_date - relativedelta(years=1),
+            max_date + relativedelta(years=1),
         ),
         x_minor_ticks=2,
         tools=[
